@@ -82,7 +82,7 @@
                     <i class="bi bi-coin footer-icon"></i>
                     <span>Points</span>
                 </a>
-                <a href="#" class="footer-menu-item">
+                <a href="{{ route('contractor.leaders') }}" class="footer-menu-item {{ request()->routeIs('contractor.leaders') ? 'active' : '' }}">
                     <i class="bi bi-trophy footer-icon"></i>
                     <span>Leaders</span>
                 </a>
