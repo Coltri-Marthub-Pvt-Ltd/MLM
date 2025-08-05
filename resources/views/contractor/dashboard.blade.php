@@ -5,8 +5,6 @@
 @section('content')
 <!-- Welcome Section -->
 <section class="welcome-section">
-    <h1 class="welcome-title">Welcome back, {{ $contractor->name }}!</h1>
-    <p class="welcome-subtitle">Here's your dashboard overview</p>
     
     <!-- Progress Cards -->
     <div class="progress-cards">
@@ -33,29 +31,24 @@
 </section>
 
 <!-- Bootstrap Vertical Tabs -->
-<section class="vertical-tabs-section">
+<section class="vertical-tabs-section py-3">
     <div class="row">
         <div class="col-5">
             <!-- Vertical Tab Navigation -->
             <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                 <button class="nav-link active" id="v-pills-gift-tab" data-bs-toggle="pill" data-bs-target="#v-pills-gift" type="button" role="tab" aria-controls="v-pills-gift" aria-selected="true">
-                    <i class="bi bi-gift me-2"></i>
                     Gift Card
                 </button>
                 <button class="nav-link" id="v-pills-orders-tab" data-bs-toggle="pill" data-bs-target="#v-pills-orders" type="button" role="tab" aria-controls="v-pills-orders" aria-selected="false">
-                    <i class="bi bi-box-seam me-2"></i>
                     Orders
                 </button>
                 <button class="nav-link" id="v-pills-schemes-tab" data-bs-toggle="pill" data-bs-target="#v-pills-schemes" type="button" role="tab" aria-controls="v-pills-schemes" aria-selected="false">
-                    <i class="bi bi-clock-history me-2"></i>
                     Limited Schemes
                 </button>
                 <button class="nav-link" id="v-pills-deals-tab" data-bs-toggle="pill" data-bs-target="#v-pills-deals" type="button" role="tab" aria-controls="v-pills-deals" aria-selected="false">
-                    <i class="bi bi-tags me-2"></i>
                     Deals
                 </button>
                 <button class="nav-link" id="v-pills-new-tab" data-bs-toggle="pill" data-bs-target="#v-pills-new" type="button" role="tab" aria-controls="v-pills-new" aria-selected="false">
-                    <i class="bi bi-star me-2"></i>
                     New Features
                 </button>
             </div>
