@@ -5,15 +5,12 @@
 @section('content')
 <!-- Welcome Section -->
 <section class="welcome-section">
-    <h1 class="welcome-title">Welcome back, {{ $contractor->name }}!</h1>
-    <p class="welcome-subtitle">Here's your dashboard overview</p>
+    
     
     <!-- Progress Cards -->
     <div class="progress-cards">
         <div class="progress-card">
-            <div class="progress-icon">
-                <i class="bi bi-coin"></i>
-            </div>
+         
             <div class="progress-value">{{ $contractor->points }}</div>
             <div class="progress-label">Coins</div>
             <div class="progress-bar-container">
@@ -24,40 +21,12 @@
         </div>
         
         <div class="progress-card">
-            <div class="progress-icon">
-                <i class="bi bi-people"></i>
-            </div>
+           
             <div class="progress-value">{{ $directMamber }}</div>
             <div class="progress-label">Sponsors</div>
             <div class="progress-bar-container">
                 <div class="progress-bar">
                     <div class="progress-fill" style="width: {{ min(($directMamber / 10) * 100, 100) }}%"></div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="progress-card">
-            <div class="progress-icon">
-                <i class="bi bi-clock"></i>
-            </div>
-            <div class="progress-value">{{ $referalMember }}</div>
-            <div class="progress-label">Pending</div>
-            <div class="progress-bar-container">
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: {{ min(($referalMember / 5) * 100, 100) }}%"></div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="progress-card">
-            <div class="progress-icon">
-                <i class="bi bi-award"></i>
-            </div>
-            <div class="progress-value">{{ count($badges) }}</div>
-            <div class="progress-label">Badges</div>
-            <div class="progress-bar-container">
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: {{ min((count($badges) / 5) * 100, 100) }}%"></div>
                 </div>
             </div>
         </div>
