@@ -955,3 +955,148 @@ body {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 } 
+
+/* Vertical Tabs Section */
+.vertical-tabs-section {
+    padding: 0 0.5rem 0.5rem;
+}
+
+.vertical-tabs-section .nav-pills {
+    background: white;
+    border-radius: 8px;
+    padding: 0.5rem;
+    box-shadow: 0 2px 8px rgba(35, 50, 64, 0.08);
+    border: 1px solid rgba(35, 50, 64, 0.05);
+}
+
+.vertical-tabs-section .nav-link {
+    color: var(--contractor-dark);
+    border-radius: 6px;
+    margin-bottom: 0.25rem;
+    padding: 0.5rem 0.75rem;
+    font-weight: 500;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    border: none;
+    background: transparent;
+    text-align: left;
+    width: 100%;
+}
+
+.vertical-tabs-section .nav-link:hover {
+    background: rgba(139, 69, 19, 0.1);
+    color: var(--contractor-primary);
+    transform: translateX(3px);
+}
+
+.vertical-tabs-section .nav-link.active {
+    background: linear-gradient(135deg, var(--contractor-primary), var(--contractor-accent));
+    color: white;
+    box-shadow: 0 2px 8px rgba(139, 69, 19, 0.3);
+}
+
+.vertical-tabs-section .nav-link i {
+    font-size: 0.9rem;
+}
+
+.vertical-tabs-section .tab-content {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(35, 50, 64, 0.08);
+    border: 1px solid rgba(35, 50, 64, 0.05);
+    overflow: hidden;
+}
+
+.vertical-tabs-section .card {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.vertical-tabs-section .card-header {
+    background: linear-gradient(135deg, var(--contractor-primary), var(--contractor-accent));
+    color: white;
+    border-bottom: none;
+    padding: 0.75rem 1rem;
+}
+
+.vertical-tabs-section .card-title {
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.vertical-tabs-section .card-body {
+    padding: 1rem;
+}
+
+.vertical-tabs-section .table {
+    margin-bottom: 0;
+}
+
+.vertical-tabs-section .table th {
+    border-top: none;
+    font-weight: 600;
+    color: var(--contractor-dark);
+    background: #f8f9fa;
+    padding: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.vertical-tabs-section .table td {
+    padding: 0.5rem;
+    vertical-align: middle;
+    border-color: #f8f9fa;
+    font-size: 0.85rem;
+}
+
+.vertical-tabs-section .table-hover tbody tr:hover {
+    background-color: rgba(139, 69, 19, 0.05);
+}
+
+.vertical-tabs-section .badge {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.vertical-tabs-section .btn-sm {
+    padding: 0.2rem 0.6rem;
+    font-size: 0.75rem;
+}
+
+.vertical-tabs-section .progress {
+    background-color: rgba(139, 69, 19, 0.1);
+}
+
+.vertical-tabs-section .progress-bar {
+    background: linear-gradient(90deg, var(--contractor-primary), var(--contractor-accent));
+}
+
+/* Mobile Responsive for Vertical Tabs */
+@media (max-width: 767px) {
+    .vertical-tabs-section .col-5 {
+        margin-bottom: 0.5rem;
+    }
+    
+    .vertical-tabs-section .nav-pills {
+        margin-bottom: 0.5rem;
+    }
+    
+    .vertical-tabs-section .nav-link {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+    }
+    
+    .vertical-tabs-section .card-body {
+        padding: 0.75rem;
+    }
+    
+    .vertical-tabs-section .table-responsive {
+        font-size: 0.8rem;
+    }
+    
+    .vertical-tabs-section .table th,
+    .vertical-tabs-section .table td {
+        padding: 0.4rem;
+    }
+} 
