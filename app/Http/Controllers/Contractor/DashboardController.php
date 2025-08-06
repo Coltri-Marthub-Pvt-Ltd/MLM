@@ -50,7 +50,7 @@ class DashboardController extends Controller
     public function leaderboard(): View
     {
         $contractor = Auth::guard('contractor')->user();
-        $badges = Badge::all();
+        $badges = Badge::all(); 
 
         // Static leaderboard data
         $leaders = [
