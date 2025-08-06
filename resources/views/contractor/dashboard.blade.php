@@ -9,8 +9,8 @@
     <!-- Progress Cards -->
     <div class="progress-cards">
         <div class="progress-card">
-            <div class="progress-value">{{ $contractor->points }}</div>
             <div class="progress-label">Coins</div>
+            <div class="progress-value">{{ $contractor->points }}</div>
             <div class="progress-bar-container">
                 <div class="progress-bar">
                     <div class="progress-fill" style="width: {{ min(($contractor->points / 1000) * 100, 100) }}%"></div>
@@ -19,8 +19,8 @@
         </div>
         
         <div class="progress-card">
-            <div class="progress-value">{{ $directMamber }}</div>
             <div class="progress-label">Sponsors</div>
+            <div class="progress-value">{{ $directMamber }}</div>
             <div class="progress-bar-container">
                 <div class="progress-bar">
                     <div class="progress-fill" style="width: {{ min(($directMamber / 10) * 100, 100) }}%"></div>
