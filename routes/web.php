@@ -51,18 +51,16 @@ Route::post('/contractor/register', [ContractorRegisterController::class, 'regis
 // Contractor Routes (Protected by contractor auth middleware)
 Route::middleware(['auth:contractor'])->prefix('contractor')->name('contractor.')->group(function () {
     Route::get('/dashboard', [ContractorDashboardController::class, 'index'])->name('dashboard');
-    Route::get('/leaders', [ContractorDashboardController::class, 'leaderboard'])->name('leaders');
-    
+
     // Product Routes for Contractors
     Route::prefix('products')->name('products.')->group(function () {
         Route::get('/', [ContractorProductController::class, 'index'])->name('index');
         Route::get('/{product:slug}', [ContractorProductController::class, 'show'])->name('show');
         Route::post('/add-to-cart', [ContractorProductController::class, 'addToCart'])->name('cart');
         Route::post('/place-order', [ContractorProductController::class, 'placeOrder'])->name('myorder');
-
     });
 
-        // Coins Product Routes for Contractors
+    // Coins Product Routes for Contractors
     Route::prefix('coins-products')->name('coins-products.')->group(function () {
         Route::get('/', [CoinContractorProductController::class, 'index'])->name('index');
         Route::get('/{product:slug}', [CoinContractorProductController::class, 'show'])->name('show');
@@ -70,48 +68,56 @@ Route::middleware(['auth:contractor'])->prefix('contractor')->name('contractor.'
         // Route::post('/place-order', [ContractorProductController::class, 'placeOrder'])->name('myorder');
 
     });
-    
-     Route::get('cart', [ContractorProductController::class, 'showcart'])->name('show.cart');
-     Route::delete('contractor/cart-remove/{id}', [ContractorProductController::class, 'remoceCart'])->name('cart.remove');
-     Route::post('contractor/update', [ContractorProductController::class, 'updateCart'])->name('cart.update');
-     Route::get('proceed-to-checkout', [ContractorProductController::class, 'ProceedCheckout'])->name('cart.checkout');
-     
-     Route::get('my-orders', [ContractorProductController::class, 'myOrders'])->name('myorders');
-     Route::get('orders/{id}/track', [ContractorProductController::class, 'OrderTrack'])->name('orders.track');
-     Route::get('coins-orders/{id}/track', [CoinContractorProductController::class, 'OrderTrack'])->name('coins.orders.track');
 
+    Route::get('cart', [ContractorProductController::class, 'showcart'])->name('show.cart');
+    Route::delete('contractor/cart-remove/{id}', [ContractorProductController::class, 'remoceCart'])->name('cart.remove');
+    Route::post('contractor/update', [ContractorProductController::class, 'updateCart'])->name('cart.update');
+    Route::get('proceed-to-checkout', [ContractorProductController::class, 'ProceedCheckout'])->name('cart.checkout');
+
+    Route::get('my-orders', [ContractorProductController::class, 'myOrders'])->name('myorders');
+    Route::get('orders/{id}/track', [ContractorProductController::class, 'OrderTrack'])->name('orders.track');
+    Route::get('coins-orders/{id}/track', [CoinContractorProductController::class, 'OrderTrack'])->name('coins.orders.track');
 });
 
 // Admin Routes (Protected by auth middleware)
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    
+
     // Dashboard
-    Route::get('/dashboard', [DashboardController::class, 'index'])
+Route::get('/dashboard', [DashboardController::class, 'index'])
         ->middleware('permission:view_dashboard')
         ->name('dashboard');
-    
+
     Route::put('brands/{brand}', [BrandController::class, 'update'])->name('admin.brands.update');
 
     Route::resource('locations', LocationController::class);
     Route::resource('product-types', \App\Http\Controllers\Admin\ProductTypeController::class);
-     Route::resource('badges', \App\Http\Controllers\Admin\BadgeController::class);
-        Route::resource('gitcards', \App\Http\Controllers\Admin\GitCardController::class)->except(['show', 'create', 'edit']);
-        Route::resource('limited-schemes', \App\Http\Controllers\Admin\LimitedSchemeController::class)->except(['show', 'create', 'edit']);
-        Route::resource('deals', \App\Http\Controllers\Admin\DealController::class)->except(['show', 'create', 'edit']);
-        Route::resource('new-schemes', \App\Http\Controllers\Admin\NewSchemeController::class)->except(['show', 'create', 'edit']);
-        Route::resource('new-opportunities', \App\Http\Controllers\Admin\NewOpportunityController::class);
-          Route::resource('events', \App\Http\Controllers\Admin\EventController::class);
-    
+    Route::resource('badges', \App\Http\Controllers\Admin\BadgeController::class);
+    Route::resource('gitcards', \App\Http\Controllers\Admin\GitCardController::class)->except(['show', 'create', 'edit']);
+    Route::resource('limited-schemes', \App\Http\Controllers\Admin\LimitedSchemeController::class)->except(['show', 'create', 'edit']);
+    Route::resource('deals', \App\Http\Controllers\Admin\DealController::class)->except(['show', 'create', 'edit']);
+    Route::resource('new-schemes', \App\Http\Controllers\Admin\NewSchemeController::class)->except(['show', 'create', 'edit']);
+    Route::resource('new-opportunities', \App\Http\Controllers\Admin\NewOpportunityController::class);
+    Route::resource('events', \App\Http\Controllers\Admin\EventController::class);
+
     // Additional route for deleting gallery images
-     Route::resource('events', \App\Http\Controllers\Admin\EventController::class);
+    Route::resource('events', \App\Http\Controllers\Admin\EventController::class);
     Route::delete('events/{event}/images/{mediaId}', [\App\Http\Controllers\Admin\EventController::class, 'deleteImage'])
         ->name('admin.events.deleteImage');
 
-        Route::resource('sampling-requests', \App\Http\Controllers\Admin\SamplingRequestController::class)->except(['show']);
+    Route::resource('sampling-requests', \App\Http\Controllers\Admin\SamplingRequestController::class)->except(['show']);
     Route::get('sampling-requests/{samplingRequest}', [\App\Http\Controllers\Admin\SamplingRequestController::class, 'show'])->name('sampling-requests.show');
 
+    Route::resource('complaints', \App\Http\Controllers\Admin\ComplaintController::class)->except(['show']);
+    Route::get('complaints/{complaint}', [\App\Http\Controllers\Admin\ComplaintController::class, 'show'])->name('complaints.show');
+    Route::delete('complaints/photos/{photo}', [\App\Http\Controllers\Admin\ComplaintController::class, 'destroyPhoto'])->name('complaints.photos.destroy');
 
-        Route::resource('brands', BrandController::class);
+    Route::resource('visit-requests', \App\Http\Controllers\Admin\VisitRequestController::class);
+    Route::resource('git-distributeds', \App\Http\Controllers\Admin\GitDistributedController::class)
+        ->names('git-distributeds');
+
+    Route::get('enquery', [\App\Http\Controllers\Admin\GitDistributedController::class, 'enquery'])->name('enquery');
+
+    Route::resource('brands', BrandController::class);
     // User Management Routes
     Route::prefix('users')->name('users.')->group(function () {
         // Manage permissions (create routes first)
@@ -122,14 +128,14 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
             Route::put('/{user}', [UserController::class, 'update'])->name('update');
             Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
         });
-        
+
         // View permissions (parameterized routes last)
         Route::middleware('permission:view_users')->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('index');
             Route::get('/{user}', [UserController::class, 'show'])->name('show');
         });
     });
-    
+
     // Role Management Routes
     Route::prefix('roles')->name('roles.')->group(function () {
         // Manage permissions (create routes first)
@@ -140,14 +146,14 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
             Route::put('/{role}', [RoleController::class, 'update'])->name('update');
             Route::delete('/{role}', [RoleController::class, 'destroy'])->name('destroy');
         });
-        
+
         // View permissions (parameterized routes last)
         Route::middleware('permission:view_roles')->group(function () {
             Route::get('/', [RoleController::class, 'index'])->name('index');
             Route::get('/{role}', [RoleController::class, 'show'])->name('show');
         });
     });
-    
+
     // Permission Management Routes
     Route::prefix('permissions')->name('permissions.')->group(function () {
         // Manage permissions (create routes first)
@@ -155,14 +161,14 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
             Route::get('/create', [PermissionController::class, 'create'])->name('create');
             Route::post('/', [PermissionController::class, 'store'])->name('store');
         });
-        
+
         // View permissions (parameterized routes last)
         Route::middleware('permission:view_permissions')->group(function () {
             Route::get('/', [PermissionController::class, 'index'])->name('index');
             Route::get('/{permission}', [PermissionController::class, 'show'])->name('show');
         });
     });
-    
+
     // Category Management Routes
     Route::prefix('categories')->name('categories.')->group(function () {
         // Manage permissions (create routes first)
@@ -172,16 +178,15 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
             Route::get('/{category}/edit', [CategoryController::class, 'edit'])->name('edit');
             Route::put('/{category}', [CategoryController::class, 'update'])->name('update');
             Route::delete('/{category}', [CategoryController::class, 'destroy'])->name('destroy');
-            
         });
-        
+
         // View permissions (parameterized routes last)
         Route::middleware('permission:view_categories')->group(function () {
             Route::get('/', [CategoryController::class, 'index'])->name('index');
             Route::get('/{category}', [CategoryController::class, 'show'])->name('show');
         });
     });
-    
+
     // Product Management Routes
     Route::prefix('coins-products')->name('coins-products.')->group(function () {
         // Manage permissions (create routes first)
@@ -193,7 +198,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
             Route::delete('/{product}', [CoinsProductController::class, 'destroy'])->name('destroy');
             Route::delete('/{product}/remove-image', [CoinsProductController::class, 'removeImage'])->name('remove-image');
         });
-        
+
         // View permissions (parameterized routes last)
         Route::middleware('permission:view_products')->group(function () {
             Route::get('/', [CoinsProductController::class, 'index'])->name('index');
@@ -202,7 +207,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     });
 
 
-        // Coins Product Management Routes
+    // Coins Product Management Routes
     Route::prefix('products')->name('products.')->group(function () {
         // Manage permissions (create routes first)
         Route::middleware('permission:manage_products')->group(function () {
@@ -213,7 +218,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
             Route::delete('/{product}', [ProductController::class, 'destroy'])->name('destroy');
             Route::delete('/{product}/remove-image', [ProductController::class, 'removeImage'])->name('remove-image');
         });
-        
+
         // View permissions (parameterized routes last)
         Route::middleware('permission:view_products')->group(function () {
             Route::get('/', [ProductController::class, 'index'])->name('index');
@@ -221,7 +226,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         });
     });
 
-    
+
     // Order Management Routes
     Route::prefix('orders')->name('orders.')->group(function () {
         // Manage permissions (create routes first)
@@ -233,16 +238,16 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
             Route::delete('/{order}', [OrderController::class, 'destroy'])->name('destroy');
             Route::post('/order-status-update', [OrderController::class, 'orderStatus'])->name('status.update');
         });
-        
+
         // View permissions (parameterized routes last)
         Route::middleware('permission:view_orders')->group(function () {
             Route::get('/', [OrderController::class, 'index'])->name('index');
             Route::get('/{order}', [OrderController::class, 'show'])->name('show');
         });
     });
-    
+
     // coin order controller
-        // Order Management Routes
+    // Order Management Routes
     Route::prefix('coins-orders')->name('coins-orders.')->group(function () {
         // Manage permissions (create routes first)
         Route::middleware('permission:manage_orders')->group(function () {
@@ -253,7 +258,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
             Route::delete('/{order}', [CoinsOdersController::class, 'destroy'])->name('destroy');
             Route::post('/order-status-update', [CoinsOdersController::class, 'orderStatus'])->name('status.update');
         });
-        
+
         // View permissions (parameterized routes last)
         Route::middleware('permission:view_orders')->group(function () {
             Route::get('/', [CoinsOdersController::class, 'index'])->name('index');
@@ -261,7 +266,6 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         });
     });
 
-    
     // Task Management Routes
     Route::prefix('tasks')->name('tasks.')->group(function () {
         // Manage permissions (create routes first) - Admin only
@@ -272,7 +276,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
             Route::put('/{task}', [TaskController::class, 'update'])->name('update');
             Route::delete('/{task}', [TaskController::class, 'destroy'])->name('destroy');
         });
-        
+
         // View permissions - All users with view_tasks permission
         Route::middleware('permission:view_tasks')->group(function () {
             Route::get('/', [TaskController::class, 'index'])->name('index');
@@ -280,7 +284,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
             Route::post('/{task}/toggle-status', [TaskController::class, 'toggleStatus'])->name('toggle-status');
         });
     });
-    
+
     // Settings Routes
     Route::prefix('settings')->name('settings.')->group(function () {
         Route::middleware('permission:manage_settings')->group(function () {
