@@ -10,6 +10,7 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'order_number',
         'date',
         'mkt_person',
@@ -21,7 +22,8 @@ class Order extends Model
         'rate',
         'transport',
         'supplier',
-        'partner_commission'
+        'partner_commission',
+        'assign_to'
     ];
 
     public function product()

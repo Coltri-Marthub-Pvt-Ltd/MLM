@@ -1,405 +1,255 @@
-@extends('layouts.contractor')
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
-@section('title', 'Dashboard')
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-@section('content')
-<!-- Welcome Section -->
-<section class="welcome-section">
-    
-    <!-- Progress Cards -->
-    <div class="progress-cards">
-        <div class="progress-card">
-            <div class="progress-value">{{ $contractor->points }}</div>
-            <div class="progress-label">Coins</div>
-            <div class="progress-bar-container">
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: {{ min(($contractor->points / 1000) * 100, 100) }}%"></div>
+    <title>Contractor Dashboard - {{ config('app.name', 'Laravel') }}</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --contractor-primary: #F3B374;
+            --contractor-secondary: #FFF1D4;
+            --contractor-dark: #233240;
+            --contractor-light: #FFF1D4;
+            --contractor-accent: #F3B374;
+        }
+
+        body {
+            background-color: var(--contractor-secondary);
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Enhanced Navigation Bar */
+        .navbar {
+            background: linear-gradient(135deg, var(--contractor-primary), var(--contractor-accent));
+            box-shadow: 0 2px 10px rgba(35, 50, 64, 0.1);
+            padding: 0.5rem 0;
+        }
+
+        .navbar-container {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            color: white !important;
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-right: 2rem;
+        }
+
+        .logo-icon {
+            font-size: 1.5rem;
+            margin-right: 0.75rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-grow: 1;
+        }
+
+        .nav-menu-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-menu-right {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .nav-item {
+            position: relative;
+            margin: 0 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            padding: 0.75rem 1rem !important;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: white !important;
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .nav-link i {
+            margin-right: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .badge-menu {
+            display: flex;
+            align-items: center;
+            margin-left: 1rem;
+        }
+
+        .menu-badge {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            color: white;
+            font-weight: 500;
+            margin-left: 0.75rem;
+            transition: all 0.2s ease;
+        }
+
+        .menu-badge:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .badge-icon {
+            margin-right: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .badge-value {
+            font-weight: 600;
+            margin-left: 0.25rem;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            margin-left: 1.5rem;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.75rem;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-name {
+            color: white;
+            font-weight: 500;
+            margin-right: 1rem;
+        }
+
+        .btn-logout {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            border-radius: 8px;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-logout:hover {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .btn-logout i {
+            margin-right: 0.5rem;
+        }
+
+        /* Mobile menu adjustments */
+        @media (max-width: 992px) {
+            .navbar-container {
+                flex-wrap: wrap;
+            }
+            
+            .badge-menu {
+                order: 3;
+                width: 100%;
+                justify-content: flex-end;
+                margin: 0.5rem 0;
+                padding: 0 1rem;
+            }
+            
+            .user-menu {
+                margin-left: auto;
+            }
+        }
+
+        /* Main content remains the same */
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        .welcome-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(35, 50, 64, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* ... rest of your existing styles ... */
+    </style>
+</head>
+
+<body>
+    <!-- Combined Navigation Bar with Enhanced Menu -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <div class="navbar-container">
+                <!-- Logo/Brand -->
+                <a class="navbar-brand" href="{{ route('contractor.dashboard') }}">
+                    <i class="bi bi-person-badge logo-icon"></i>
+                    Contractor Portal
+                </a>
+
+                <!-- Mobile Toggle -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Main Navigation -->
+                <div class="collapse navbar-collapse nav-menu" id="navbarNav">
+                    <!-- Badges and User Menu -->
+                    <div class="nav-menu-right">
+                        <div class="badge-menu">
+                            <div class="menu-badge">
+                                <i class="bi bi-coin badge-icon"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+    </nav>
+
+    <div class="main-content">
         
-        <div class="progress-card">
-            <div class="progress-value">{{ $directMamber }}</div>
-            <div class="progress-label">Sponsors</div>
-            <div class="progress-bar-container">
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: {{ min(($directMamber / 10) * 100, 100) }}%"></div>
-                </div>
-            </div>
-        </div>
     </div>
-</section>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 
-<!-- Bootstrap Vertical Tabs -->
-<section class="vertical-tabs-section py-3">
-    <div class="row">
-        <div class="col-5">
-            <!-- Vertical Tab Navigation -->
-            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <button class="nav-link active" id="v-pills-gift-tab" data-bs-toggle="pill" data-bs-target="#v-pills-gift" type="button" role="tab" aria-controls="v-pills-gift" aria-selected="true">
-                    Gift Card
-                </button>
-                <button class="nav-link" id="v-pills-orders-tab" data-bs-toggle="pill" data-bs-target="#v-pills-orders" type="button" role="tab" aria-controls="v-pills-orders" aria-selected="false">
-                    Orders
-                </button>
-                <button class="nav-link" id="v-pills-schemes-tab" data-bs-toggle="pill" data-bs-target="#v-pills-schemes" type="button" role="tab" aria-controls="v-pills-schemes" aria-selected="false">
-                    Limited Schemes
-                </button>
-                <button class="nav-link" id="v-pills-deals-tab" data-bs-toggle="pill" data-bs-target="#v-pills-deals" type="button" role="tab" aria-controls="v-pills-deals" aria-selected="false">
-                    Deals
-                </button>
-                <button class="nav-link" id="v-pills-new-tab" data-bs-toggle="pill" data-bs-target="#v-pills-new" type="button" role="tab" aria-controls="v-pills-new" aria-selected="false">
-                    New Features
-                </button>
-            </div>
-        </div>
-        
-        <div class="col-7">
-            <!-- Tab Content -->
-            <div class="tab-content" id="v-pills-tabContent">
-                <!-- Gift Card Tab -->
-                <div class="tab-pane fade show active" id="v-pills-gift" role="tabpanel" aria-labelledby="v-pills-gift-tab">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">
-                                <i class="bi bi-gift me-2"></i>
-                                Gift Card Redemption
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Gift Card</th>
-                                            <th>Points Required</th>
-                                            <th>Value</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <i class="bi bi-credit-card me-2 text-primary"></i>
-                                                    <div>
-                                                        <strong>Amazon Gift Card</strong>
-                                                        <br><small class="text-muted">Digital delivery</small>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td><span class="badge bg-warning">1,000</span></td>
-                                            <td>$10.00</td>
-                                            <td><span class="badge bg-success">Available</span></td>
-                                            <td>
-                                                <button class="btn btn-sm btn-primary">Redeem</button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <i class="bi bi-credit-card me-2 text-success"></i>
-                                                    <div>
-                                                        <strong>Starbucks Gift Card</strong>
-                                                        <br><small class="text-muted">Email delivery</small>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td><span class="badge bg-warning">500</span></td>
-                                            <td>$5.00</td>
-                                            <td><span class="badge bg-success">Available</span></td>
-                                            <td>
-                                                <button class="btn btn-sm btn-primary">Redeem</button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <i class="bi bi-credit-card me-2 text-info"></i>
-                                                    <div>
-                                                        <strong>Netflix Gift Card</strong>
-                                                        <br><small class="text-muted">Digital code</small>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td><span class="badge bg-warning">2,000</span></td>
-                                            <td>$20.00</td>
-                                            <td><span class="badge bg-secondary">Coming Soon</span></td>
-                                            <td>
-                                                <button class="btn btn-sm btn-secondary" disabled>Coming Soon</button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Orders Tab -->
-                <div class="tab-pane fade" id="v-pills-orders" role="tabpanel" aria-labelledby="v-pills-orders-tab">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">
-                                <i class="bi bi-box-seam me-2"></i>
-                                Order History
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Order ID</th>
-                                            <th>Product</th>
-                                            <th>Date</th>
-                                            <th>Status</th>
-                                            <th>Total</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><strong>#ORD-001</strong></td>
-                                            <td>Premium Headphones</td>
-                                            <td>2024-01-15</td>
-                                            <td><span class="badge bg-success">Delivered</span></td>
-                                            <td>$299.99</td>
-                                            <td>
-                                                <a href="{{ route('contractor.myorders') }}" class="btn btn-sm btn-outline-primary">View</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>#ORD-002</strong></td>
-                                            <td>Smart Watch</td>
-                                            <td>2024-01-10</td>
-                                            <td><span class="badge bg-warning">Processing</span></td>
-                                            <td>$199.99</td>
-                                            <td>
-                                                <a href="{{ route('contractor.myorders') }}" class="btn btn-sm btn-outline-primary">Track</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>#ORD-003</strong></td>
-                                            <td>Wireless Earbuds</td>
-                                            <td>2024-01-05</td>
-                                            <td><span class="badge bg-info">Shipped</span></td>
-                                            <td>$89.99</td>
-                                            <td>
-                                                <a href="{{ route('contractor.myorders') }}" class="btn btn-sm btn-outline-primary">Track</a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Limited Schemes Tab -->
-                <div class="tab-pane fade" id="v-pills-schemes" role="tabpanel" aria-labelledby="v-pills-schemes-tab">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">
-                                <i class="bi bi-clock-history me-2"></i>
-                                Limited Time Schemes
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Scheme</th>
-                                            <th>Duration</th>
-                                            <th>Reward</th>
-                                            <th>Progress</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <div>
-                                                    <strong>Double Points Week</strong>
-                                                    <br><small class="text-muted">Earn 2x points on all purchases</small>
-                                                </div>
-                                            </td>
-                                            <td>7 days</td>
-                                            <td>2x Points</td>
-                                            <td>
-                                                <div class="progress" style="height: 6px;">
-                                                    <div class="progress-bar" style="width: 75%"></div>
-                                                </div>
-                                                <small class="text-muted">3 days left</small>
-                                            </td>
-                                            <td><span class="badge bg-success">Active</span></td>
-                                            <td>
-                                                <button class="btn btn-sm btn-success">Participate</button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div>
-                                                    <strong>Referral Bonus</strong>
-                                                    <br><small class="text-muted">Get 500 points per referral</small>
-                                                </div>
-                                            </td>
-                                            <td>30 days</td>
-                                            <td>500 Points</td>
-                                            <td>
-                                                <div class="progress" style="height: 6px;">
-                                                    <div class="progress-bar" style="width: 45%"></div>
-                                                </div>
-                                                <small class="text-muted">13 days left</small>
-                                            </td>
-                                            <td><span class="badge bg-success">Active</span></td>
-                                            <td>
-                                                <button class="btn btn-sm btn-success">Share</button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Deals Tab -->
-                <div class="tab-pane fade" id="v-pills-deals" role="tabpanel" aria-labelledby="v-pills-deals-tab">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">
-                                <i class="bi bi-tags me-2"></i>
-                                Special Deals & Discounts
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Deal</th>
-                                            <th>Discount</th>
-                                            <th>Valid Until</th>
-                                            <th>Usage</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <div>
-                                                    <strong>New User Discount</strong>
-                                                    <br><small class="text-muted">First purchase discount</small>
-                                                </div>
-                                            </td>
-                                            <td><span class="badge bg-danger">20% OFF</span></td>
-                                            <td>2024-02-15</td>
-                                            <td>0/1</td>
-                                            <td><span class="badge bg-success">Available</span></td>
-                                            <td>
-                                                <button class="btn btn-sm btn-primary">Use Now</button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div>
-                                                    <strong>Bulk Purchase</strong>
-                                                    <br><small class="text-muted">Buy 3+ items get 15% off</small>
-                                                </div>
-                                            </td>
-                                            <td><span class="badge bg-warning">15% OFF</span></td>
-                                            <td>2024-01-31</td>
-                                            <td>2/5</td>
-                                            <td><span class="badge bg-success">Available</span></td>
-                                            <td>
-                                                <button class="btn btn-sm btn-primary">Shop Now</button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- New Features Tab -->
-                <div class="tab-pane fade" id="v-pills-new" role="tabpanel" aria-labelledby="v-pills-new-tab">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">
-                                <i class="bi bi-star me-2"></i>
-                                Latest Updates & Features
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Feature</th>
-                                            <th>Type</th>
-                                            <th>Release Date</th>
-                                            <th>Status</th>
-                                            <th>Description</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <div>
-                                                    <strong>Mobile App</strong>
-                                                </div>
-                                            </td>
-                                            <td><span class="badge bg-primary">New</span></td>
-                                            <td>2024-01-20</td>
-                                            <td><span class="badge bg-success">Live</span></td>
-                                            <td>Download our new mobile app for better experience</td>
-                                            <td>
-                                                <button class="btn btn-sm btn-success">Download</button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div>
-                                                    <strong>Real-time Tracking</strong>
-                                                </div>
-                                            </td>
-                                            <td><span class="badge bg-info">Update</span></td>
-                                            <td>2024-01-18</td>
-                                            <td><span class="badge bg-success">Live</span></td>
-                                            <td>Track your orders in real-time with live updates</td>
-                                            <td>
-                                                <button class="btn btn-sm btn-outline-primary">Try Now</button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div>
-                                                    <strong>AI Recommendations</strong>
-                                                </div>
-                                            </td>
-                                            <td><span class="badge bg-warning">Beta</span></td>
-                                            <td>2024-02-01</td>
-                                            <td><span class="badge bg-warning">Coming Soon</span></td>
-                                            <td>Get personalized product recommendations</td>
-                                            <td>
-                                                <button class="btn btn-sm btn-secondary" disabled>Waitlist</button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-@endsection
+</html>
