@@ -36,7 +36,7 @@
         <div class="col-5">
             <!-- Vertical Tab Navigation -->
             <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <button class="nav-link active" id="v-pills-gift-tab" data-bs-toggle="pill" data-bs-target="#v-pills-gift" type="button" role="tab" aria-controls="v-pills-gift" aria-selected="true">
+                <button class="nav-link" id="v-pills-gift-tab" data-bs-toggle="pill" data-bs-target="#v-pills-gift" type="button" role="tab" aria-controls="v-pills-gift" aria-selected="false">
                     Gift Card
                 </button>
                 <button class="nav-link" id="v-pills-orders-tab" data-bs-toggle="pill" data-bs-target="#v-pills-orders" type="button" role="tab" aria-controls="v-pills-orders" aria-selected="false">
@@ -57,8 +57,17 @@
         <div class="col-7">
             <!-- Tab Content -->
             <div class="tab-content" id="v-pills-tabContent">
+                <!-- Default Logo (shown when no tab is active) -->
+                <div class="tab-pane fade show active" id="default-logo-tab" role="tabpanel">
+                    <div class="default-logo-content">
+                        <div class="default-logo-icon">
+                            <i class="bi bi-person-badge"></i>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Gift Card Tab -->
-                <div class="tab-pane fade show active" id="v-pills-gift" role="tabpanel" aria-labelledby="v-pills-gift-tab">
+                <div class="tab-pane fade" id="v-pills-gift" role="tabpanel" aria-labelledby="v-pills-gift-tab">
                     <div class="card">
                         <div class="card-header">
                             <h5 class="card-title mb-0">
@@ -402,4 +411,38 @@
         </div>
     </div>
 </section>
+
+
+
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const defaultLogoTab = document.getElementById('default-logo-tab');
+    const tabButtons = document.querySelectorAll('.nav-link');
+    
+    // Function to hide default logo when any tab is clicked
+    function hideDefaultLogo() {
+        if (defaultLogoTab) {
+            defaultLogoTab.classList.remove('show', 'active');
+        }
+    }
+    
+    // Add click event listeners to all tab buttons
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            hideDefaultLogo();
+        });
+    });
+    
+    // Listen for Bootstrap tab events
+    document.addEventListener('shown.bs.tab', function(event) {
+        // Hide default logo when any tab is shown
+        if (event.target.id !== 'default-logo-tab') {
+            hideDefaultLogo();
+        }
+    });
+});
+</script>
+@endpush
