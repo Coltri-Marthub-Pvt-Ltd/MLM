@@ -335,8 +335,6 @@
 
             @yield('content')
         </div>
-<<<<<<< HEAD
-=======
 
         <!-- Footer Menu -->
         <footer class="app-footer">
@@ -363,7 +361,6 @@
                 </a>
             </div>
         </footer>
->>>>>>> origin/saurav
     </div>
 
     <!-- Bootstrap JS -->
