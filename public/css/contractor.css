@@ -20,6 +20,13 @@
     padding: 0 0.2rem;
 }
 
+.active_hlt{
+    background: linear-gradient(135deg, var(--contractor-primary), var(--contractor-accent));
+    color: white;
+    box-shadow: 0 2px 8px rgba(139, 69, 19, 0.3);
+}
+ 
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--contractor-secondary);
