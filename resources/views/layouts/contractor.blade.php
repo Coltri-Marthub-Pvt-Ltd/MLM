@@ -27,12 +27,12 @@
     <div class="app-container">
         <!-- Header -->
         <header class="app-header">
-            <div class="logo-section">
+            <a href="{{ route('contractor.dashboard') }}" class="logo-section">
                 <div class="logo">
                     <i class="bi bi-person-badge"></i>
                 </div>
                 <div class="logo-text">Contractor</div>
-            </div>
+            </a>
             
             <div class="badge-icon">
                 <i class="bi bi-award"></i>

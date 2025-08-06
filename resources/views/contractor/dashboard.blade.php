@@ -36,11 +36,11 @@
         <div class="col-5">
             <!-- Vertical Tab Navigation -->
             <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <button class="nav-link" id="v-pills-gift-tab" data-bs-toggle="pill" data-bs-target="#v-pills-gift" type="button" role="tab" aria-controls="v-pills-gift" aria-selected="false">
-                    Gift Card
-                </button>
                 <button class="nav-link" id="v-pills-orders-tab" data-bs-toggle="pill" data-bs-target="#v-pills-orders" type="button" role="tab" aria-controls="v-pills-orders" aria-selected="false">
                     Orders
+                </button>
+                <button class="nav-link" id="v-pills-gift-tab" data-bs-toggle="pill" data-bs-target="#v-pills-gift" type="button" role="tab" aria-controls="v-pills-gift" aria-selected="false">
+                    Gift Card
                 </button>
                 <button class="nav-link" id="v-pills-schemes-tab" data-bs-toggle="pill" data-bs-target="#v-pills-schemes" type="button" role="tab" aria-controls="v-pills-schemes" aria-selected="false">
                     Limited Schemes
@@ -49,7 +49,7 @@
                     Deals
                 </button>
                 <button class="nav-link" id="v-pills-new-tab" data-bs-toggle="pill" data-bs-target="#v-pills-new" type="button" role="tab" aria-controls="v-pills-new" aria-selected="false">
-                    New Features
+                    New
                 </button>
             </div>
         </div>
@@ -76,72 +76,67 @@
                             </h5>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Gift Card</th>
-                                            <th>Points Required</th>
-                                            <th>Value</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <i class="bi bi-credit-card me-2 text-primary"></i>
-                                                    <div>
-                                                        <strong>Amazon Gift Card</strong>
-                                                        <br><small class="text-muted">Digital delivery</small>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td><span class="badge bg-warning">1,000</span></td>
-                                            <td>$10.00</td>
-                                            <td><span class="badge bg-success">Available</span></td>
-                                            <td>
-                                                <button class="btn btn-sm btn-primary">Redeem</button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <i class="bi bi-credit-card me-2 text-success"></i>
-                                                    <div>
-                                                        <strong>Starbucks Gift Card</strong>
-                                                        <br><small class="text-muted">Email delivery</small>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td><span class="badge bg-warning">500</span></td>
-                                            <td>$5.00</td>
-                                            <td><span class="badge bg-success">Available</span></td>
-                                            <td>
-                                                <button class="btn btn-sm btn-primary">Redeem</button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <i class="bi bi-credit-card me-2 text-info"></i>
-                                                    <div>
-                                                        <strong>Netflix Gift Card</strong>
-                                                        <br><small class="text-muted">Digital code</small>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td><span class="badge bg-warning">2,000</span></td>
-                                            <td>$20.00</td>
-                                            <td><span class="badge bg-secondary">Coming Soon</span></td>
-                                            <td>
-                                                <button class="btn btn-sm btn-secondary" disabled>Coming Soon</button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div class="progress-card">
+                                <div class="progress-label">Partner Points</div>
+                                <div class="progress-value">200</div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 20%"></div>
+                                    </div>
+                                </div>
                             </div>
+                            <ul class="list-unstyled">
+                                <li class="mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <img src="https://png.pngtree.com/png-clipart/20190614/original/pngtree-vector-picture-icon-png-image_3792401.jpg" alt="Gift Card" class="img-fluid" width="40px" height="40px">
+                                        </div>
+                                        <div>
+                                            <p>Lorem ip dor sit...</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <img src="https://png.pngtree.com/png-clipart/20190614/original/pngtree-vector-picture-icon-png-image_3792401.jpg" alt="Gift Card" class="img-fluid" width="40px" height="40px">
+                                        </div>
+                                        <div>
+                                            <p>Lorem ip dor sit...</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <img src="https://png.pngtree.com/png-clipart/20190614/original/pngtree-vector-picture-icon-png-image_3792401.jpg" alt="Gift Card" class="img-fluid" width="40px" height="40px">
+                                        </div>
+                                        <div>
+                                            <p>Lorem ip dor sit...</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <img src="https://png.pngtree.com/png-clipart/20190614/original/pngtree-vector-picture-icon-png-image_3792401.jpg" alt="Gift Card" class="img-fluid" width="40px" height="40px">
+                                        </div>
+                                        <div>
+                                            <p>Lorem ip dor sit...</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <img src="https://png.pngtree.com/png-clipart/20190614/original/pngtree-vector-picture-icon-png-image_3792401.jpg" alt="Gift Card" class="img-fluid" width="40px" height="40px">
+                                        </div>
+                                        <div>
+                                            <p>Lorem ip dor sit...</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <img src="https://png.pngtree.com/png-clipart/20190614/original/pngtree-vector-picture-icon-png-image_3792401.jpg" alt="Gift Card" class="img-fluid" width="40px" height="40px">
+                                        </div>
+                                        <div>
+                                            <p>Lorem ip dor sit...</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -152,55 +147,50 @@
                         <div class="card-header">
                             <h5 class="card-title mb-0">
                                 <i class="bi bi-box-seam me-2"></i>
-                                Order History
+                                Order
                             </h5>
                         </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Order ID</th>
-                                            <th>Product</th>
-                                            <th>Date</th>
-                                            <th>Status</th>
-                                            <th>Total</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><strong>#ORD-001</strong></td>
-                                            <td>Premium Headphones</td>
-                                            <td>2024-01-15</td>
-                                            <td><span class="badge bg-success">Delivered</span></td>
-                                            <td>$299.99</td>
-                                            <td>
-                                                <a href="{{ route('contractor.myorders') }}" class="btn btn-sm btn-outline-primary">View</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>#ORD-002</strong></td>
-                                            <td>Smart Watch</td>
-                                            <td>2024-01-10</td>
-                                            <td><span class="badge bg-warning">Processing</span></td>
-                                            <td>$199.99</td>
-                                            <td>
-                                                <a href="{{ route('contractor.myorders') }}" class="btn btn-sm btn-outline-primary">Track</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>#ORD-003</strong></td>
-                                            <td>Wireless Earbuds</td>
-                                            <td>2024-01-05</td>
-                                            <td><span class="badge bg-info">Shipped</span></td>
-                                            <td>$89.99</td>
-                                            <td>
-                                                <a href="{{ route('contractor.myorders') }}" class="btn btn-sm btn-outline-primary">Track</a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        <div class="card-body ds_brand_card_section">
+                            <div class="row">
+                                <div class="col-sm-12 text-center  mb-3">
+                                    <div class="card active_hlt">
+                                        <div class="card-body">
+                                            Brand 1
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-6 mb-3">
+                                    <div class="card shadow-sm border m-0 ratio ratio-1x1">
+                                        <div class="card-body d-flex justify-content-center align-items-center">
+                                            Brand 2
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-6 mb-3">
+                                    <div class="card shadow-sm border m-0 ratio ratio-1x1">
+                                        <div class="card-body d-flex justify-content-center align-items-center">
+                                            Brand 3
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-6 mb-3">
+                                    <div class="card shadow-sm border m-0 ratio ratio-1x1">
+                                        <div class="card-body d-flex justify-content-center align-items-center">
+                                            Brand 4
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-6 mb-3">
+                                    <div class="card shadow-sm border m-0 ratio ratio-1x1">
+                                        <div class="card-body d-flex justify-content-center align-items-center">
+                                            Brand 5
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
