@@ -335,6 +335,35 @@
 
             @yield('content')
         </div>
+<<<<<<< HEAD
+=======
+
+        <!-- Footer Menu -->
+        <footer class="app-footer">
+            <div class="footer-menu">
+                <a href="{{ route('contractor.dashboard') }}" class="footer-menu-item {{ request()->routeIs('contractor.dashboard') ? 'active' : '' }}">
+                    <i class="bi bi-briefcase footer-icon"></i>
+                    <span>Business</span>
+                </a>
+                <a href="{{ route('contractor.products.index') }}" class="footer-menu-item {{ request()->routeIs('contractor.products.*') ? 'active' : '' }}">
+                    <i class="bi bi-bag footer-icon"></i>
+                    <span>Products</span>
+                </a>
+                <a href="{{ route('contractor.profile') }}" class="footer-menu-item {{ request()->routeIs('contractor.profile') ? 'active' : '' }}">
+                    <i class="bi bi-person footer-icon"></i>
+                    <span>You</span>
+                </a>
+                <a href="{{ route('contractor.coins-products.index') }}" class="footer-menu-item {{ request()->routeIs('contractor.coins-products.*') ? 'active' : '' }}">
+                    <i class="bi bi-coin footer-icon"></i>
+                    <span>Points</span>
+                </a>
+                <a href="{{ route('contractor.leaders') }}" class="footer-menu-item {{ request()->routeIs('contractor.leaders') ? 'active' : '' }}">
+                    <i class="bi bi-trophy footer-icon"></i>
+                    <span>Leaders</span>
+                </a>
+            </div>
+        </footer>
+>>>>>>> origin/saurav
     </div>
 
     <!-- Bootstrap JS -->
