@@ -36,11 +36,11 @@
         <div class="col-5">
             <!-- Vertical Tab Navigation -->
             <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <button class="nav-link" id="v-pills-gift-tab" data-bs-toggle="pill" data-bs-target="#v-pills-gift" type="button" role="tab" aria-controls="v-pills-gift" aria-selected="false">
-                    Gift Card
-                </button>
                 <button class="nav-link" id="v-pills-orders-tab" data-bs-toggle="pill" data-bs-target="#v-pills-orders" type="button" role="tab" aria-controls="v-pills-orders" aria-selected="false">
                     Orders
+                </button>
+                <button class="nav-link" id="v-pills-gift-tab" data-bs-toggle="pill" data-bs-target="#v-pills-gift" type="button" role="tab" aria-controls="v-pills-gift" aria-selected="false">
+                    Gift Card
                 </button>
                 <button class="nav-link" id="v-pills-schemes-tab" data-bs-toggle="pill" data-bs-target="#v-pills-schemes" type="button" role="tab" aria-controls="v-pills-schemes" aria-selected="false">
                     Limited Schemes
@@ -49,7 +49,7 @@
                     Deals
                 </button>
                 <button class="nav-link" id="v-pills-new-tab" data-bs-toggle="pill" data-bs-target="#v-pills-new" type="button" role="tab" aria-controls="v-pills-new" aria-selected="false">
-                    New Features
+                    New
                 </button>
             </div>
         </div>
