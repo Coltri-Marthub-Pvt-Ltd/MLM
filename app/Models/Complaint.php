@@ -1,24 +1,31 @@
-<?php 
+<?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SamplingRequest extends Model
+class Complaint extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
         'name',
-        'variant',
-        'phone',
-        'contact_details',
+        'supplied_material',
+        'date',
+        'city',
+        'address',
         'visit_request',
-        'other_details'
+        'issues'
     ];
 
     protected $casts = [
+        'date' => 'date',
         'visit_request' => 'boolean'
     ];
+
+    public function photos()
+    {
+        return $this->hasMany(ComplaintPhoto::class);
+    }
 }

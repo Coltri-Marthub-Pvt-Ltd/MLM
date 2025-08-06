@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\Contractor;
+use App\Models\User;
+use Auth;
+use PHPUnit\Metadata\Uses;
 
 class OrderController extends Controller
 {
@@ -14,8 +17,8 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Order::with('contractor');
-
+        $query = Order::with('contractor')->where('user_id',Auth::user()->id);
+     
         // Search functionality
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
@@ -45,7 +48,7 @@ class OrderController extends Controller
 
         // Get unique areas for filter
         $areas = Order::distinct()->pluck('area')->filter()->sort()->values();
-
+        
         return view('admin.orders.index', compact('orders', 'areas'));
     }
 
@@ -88,8 +91,8 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-
-        return view('admin.orders.show', compact('order'));
+        $users = User::all();
+        return view('admin.orders.show', compact('order','users'));
     }
 
     public function orderStatus(Request $request)

@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\SamplingRequest;
 use Illuminate\Http\Request;
+use Auth;
 
 class SamplingRequestController extends Controller
 {
@@ -31,7 +32,7 @@ class SamplingRequestController extends Controller
             'visit_request' => 'required|boolean',
             'other_details' => 'nullable|string'
         ]);
-
+         $validated['user_id'] = Auth::user()->id;
         SamplingRequest::create($validated);
 
         return redirect()->route('admin.sampling-requests.index')
@@ -58,7 +59,7 @@ class SamplingRequestController extends Controller
             'visit_request' => 'required|boolean',
             'other_details' => 'nullable|string'
         ]);
-
+          $validated['user_id'] = Auth::user()->id;
         $samplingRequest->update($validated);
 
         return redirect()->route('admin.sampling-requests.index')
