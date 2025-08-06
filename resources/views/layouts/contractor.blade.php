@@ -74,7 +74,7 @@
                     <i class="bi bi-bag footer-icon"></i>
                     <span>Products</span>
                 </a>
-                <a href="#" class="footer-menu-item">
+                <a href="{{ route('contractor.profile') }}" class="footer-menu-item {{ request()->routeIs('contractor.profile') ? 'active' : '' }}">
                     <i class="bi bi-person footer-icon"></i>
                     <span>You</span>
                 </a>

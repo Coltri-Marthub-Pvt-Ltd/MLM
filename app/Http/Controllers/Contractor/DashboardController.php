@@ -33,6 +33,18 @@ class DashboardController extends Controller
     }
 
     /**
+     * Show the contractor profile page.
+     */
+    public function profile(): View
+    {
+        $contractor = Auth::guard('contractor')->user();
+        $referalMember = $this->refrelmember($contractor->id);
+        $directMamber = Contractor::where('referenced_by', $contractor->id)->count();
+        
+        return view('contractor.profile', compact('contractor', 'referalMember', 'directMamber'));
+    }
+
+    /**
      * Show the leaderboard page.
      */
     public function leaderboard(): View
