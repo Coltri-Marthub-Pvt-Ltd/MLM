@@ -21,9 +21,9 @@
 </style>
     <div class="fade-in">
         <!-- Page Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex justify-content-between align-items-center ">
             <div>
-                <h1 class="h3 mb-0">Orders</h1>
+                <h4 class="h3 mb-0">Orders</h4>
                 <p class="text-muted">Manage all orders and transactions</p>
             </div>
             @can('manage_orders')
@@ -80,14 +80,10 @@
 
         <!-- Orders Table -->
         <div class="admin-card">
-            <div class="card-header">
-                <h5 class="card-title">All Orders</h5>
-                <p class="card-description">{{ $orders->total() }} orders found</p>
-            </div>
-            
+           
             @if($orders->count() > 0)
                 <div class="table-responsive">
-    <table class="table admin-table mb-0 auto-adjust-table">
+                <table class="table admin-table mb-0 auto-adjust-table">
                         <thead>
                             <tr>
                                 <th>Sr.No</th>

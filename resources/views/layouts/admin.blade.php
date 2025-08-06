@@ -35,6 +35,49 @@
     gap: 5px;
 }
 
+/* Add to your admin styles */
+#photoPreview img {
+    transition: all 0.3s ease;
+    object-fit: cover;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+}
+
+#photoPreview img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.current-photos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.current-photos .photo-item {
+    position: relative;
+}
+
+.current-photos .photo-item img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.current-photos .photo-item .delete-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.current-photos .photo-item:hover .delete-btn {
+    opacity: 1;
+}
+
     </style>
       @stack('styles') 
 </head>
@@ -163,6 +206,13 @@
                         Tasks
                     </a>
                 </div>
+
+                <div class="nav-item">
+                    <a href="{{ route('admin.enquery') }}" class="nav-link {{ request()->routeIs('admin.enquery') ? 'active' : '' }}">
+                        <i class="bi bi-list-task nav-icon"></i>
+                        Enquery
+                    </a>
+                </div>
             </div>
             @endcan
               <div class="nav-section">
@@ -173,7 +223,32 @@
                         Events
                     </a>
                 </div>
+                 <div class="nav-item">
+                    <a href="{{ route('admin.sampling-requests.index') }}" class="nav-link {{ request()->routeIs('admin.sampling-requests.*') ? 'active' : '' }}">
+                        <i class="bi bi-list-task nav-icon"></i>
+                        Sampling Requests
+                    </a>
+                </div>
+                   <div class="nav-item">
+                    <a href="{{ route('admin.complaints.index') }}" class="nav-link {{ request()->routeIs('admin.complaints.*') ? 'active' : '' }}">
+                        <i class="bi bi-list-task nav-icon"></i>
+                        Complaints
+                    </a>
+                </div>
+                 <div class="nav-item">
+                    <a href="{{ route('admin.visit-requests.index') }}" class="nav-link {{ request()->routeIs('admin.visit-requests.*') ? 'active' : '' }}">
+                        <i class="bi bi-list-task nav-icon"></i>
+                       Visit Requests
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="{{ route('admin.git-distributeds.index') }}" class="nav-link {{ request()->routeIs('admin.git-distributeds.*') ? 'active' : '' }}">
+                        <i class="bi bi-list-task nav-icon"></i>
+                       Photos
+                    </a>
+                </div>
             </div>
+            
 
             @if(auth()->user()->can('view_users') || auth()->user()->can('view_roles') || auth()->user()->can('view_permissions') || auth()->user()->can('manage_contractors'))
             <div class="nav-section">
