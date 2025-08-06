@@ -17,7 +17,6 @@
   height: auto;
 }
 
-
 </style>
     <div class="fade-in">
         <!-- Page Header -->

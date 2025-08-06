@@ -102,6 +102,9 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     Route::resource('new-opportunities', \App\Http\Controllers\Admin\NewOpportunityController::class);
     Route::resource('events', \App\Http\Controllers\Admin\EventController::class);
 
+        Route::resource('monthly-targets', \App\Http\Controllers\Admin\MonthlyTargetController::class)
+        ->except(['show', 'create', 'edit']);
+        
     // Additional route for deleting gallery images
     Route::resource('events', \App\Http\Controllers\Admin\EventController::class);
     Route::delete('events/{event}/images/{mediaId}', [\App\Http\Controllers\Admin\EventController::class, 'deleteImage'])
@@ -240,6 +243,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
             Route::put('/{order}', [OrderController::class, 'update'])->name('update');
             Route::delete('/{order}', [OrderController::class, 'destroy'])->name('destroy');
             Route::post('/order-status-update', [OrderController::class, 'orderStatus'])->name('status.update');
+            Route::post('/order-assign-update', [OrderController::class, 'orderAssign'])->name('assign.update');
         });
 
         // View permissions (parameterized routes last)

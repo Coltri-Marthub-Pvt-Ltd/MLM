@@ -206,6 +206,12 @@
                         Tasks
                     </a>
                 </div>
+                <div class="nav-item">
+                    <a href="{{ route('admin.monthly-targets.index') }}" class="nav-link {{ request()->routeIs('admin.monthly-targets.*') ? 'active' : '' }}">
+                        <i class="bi bi-list-task nav-icon"></i>
+                        Monthly Targets
+                    </a>
+                </div>
 
                 <div class="nav-item">
                     <a href="{{ route('admin.enquery') }}" class="nav-link {{ request()->routeIs('admin.enquery') ? 'active' : '' }}">

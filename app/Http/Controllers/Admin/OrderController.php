@@ -17,8 +17,12 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Order::with('contractor')->where('user_id',Auth::user()->id);
-     
+       if(Auth::user()->id!=1){
+           $query = Order::with('contractor')->where('assign_to',Auth::user()->id);
+       }else{
+         $query = Order::with('contractor');
+       }
+    
         // Search functionality
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
@@ -91,7 +95,7 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        $users = User::all();
+       $users = User::whereNotIn('id', [1])->get();
         return view('admin.orders.show', compact('order','users'));
     }
 
@@ -115,7 +119,17 @@ class OrderController extends Controller
 
         return redirect()->back()->with('success', 'Order Status updated successfully.');
     }
-
+        public function orderAssign(Request $request)
+    {
+        $order = Order::find($request->id);
+       
+        if (!$order) {
+            return redirect()->back()->with('error', 'Order not found.');
+        }
+        $order->assign_to = $request->user_id;
+        $order->save();
+        return redirect()->back()->with('success', 'Order Assigned successfully.');
+    }
 
     public function managePoins($request)
     {

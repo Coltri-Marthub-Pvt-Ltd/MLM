@@ -40,7 +40,7 @@
 
                             <div class="col-md-6">
                                 <label class="form-label text-muted">Product</label>
-                               <div class="fw-medium">{{ optional($order->product)->name ?? 'N/A' }}</div>
+                                <div class="fw-medium">{{ optional($order->product)->name ?? 'N/A' }}</div>
                             </div>
 
                             <div class="col-md-6">
@@ -51,10 +51,7 @@
                                 <label class="form-label text-muted">Contractor Phone</label>
                                 <div class="fw-medium">{{ optional($order->contractor)->phone ?? 'N/A' }}</div>
                             </div>
-                            <div class="col-md-6">
-                                <label class="form-label text-muted">Total Points</label>
-                                <div class="fw-medium">{{ $order->product->points ?? 0 * $order->qty }}</div>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -65,31 +62,57 @@
                     <div class="card-content">
                         <div class="row">
                             <div class="col-md-6">
-                                <form method="POST" action="{{route('admin.orders.status.update')}}">
+                                <form method="POST" action="{{ route('admin.orders.status.update') }}">
                                     @csrf
 
                                     <input type="hidden" name="id" id="" value="{{ request()->segment(3) }}">
                                     <input type="hidden" name="user_id" id="" value="{{ $order->user_id }}">
-                                    <input type="hidden" name="points" id="" value="{{ $order->product->points ?? 0 * $order->qty }}">
+                                    <input type="hidden" name="points" id=""
+                                        value="{{ $order->product->points ?? 0 * $order->qty }}">
                                     <label for="status">Status</label>
                                     <select name="status" id="" class="form-control">
-                                        <option value="0" @if($order->status==0) selected @endif>Pending</option>
-                                        <option value="1" @if($order->status==1) selected @endif >Processing</option>
-                                        <option value="2" @if($order->status==2) selected @endif >Approve & Shipped</option>
-                                        <option value="3" @if($order->status==3) selected @endif >Delivered</option>
-                                        <option value="4" @if($order->status==4) selected @endif >Cancelled</option>
-                                        <option value="5" @if($order->status==5) selected @endif >Returned</option>
+                                        <option value="0" @if ($order->status == 0) selected @endif>Pending
+                                        </option>
+                                        <option value="1" @if ($order->status == 1) selected @endif>Processing
+                                        </option>
+                                        <option value="2" @if ($order->status == 2) selected @endif>Approve &
+                                            Shipped</option>
+                                        <option value="3" @if ($order->status == 3) selected @endif>Delivered
+                                        </option>
+                                        <option value="4" @if ($order->status == 4) selected @endif>Cancelled
+                                        </option>
+                                        <option value="5" @if ($order->status == 5) selected @endif>Returned
+                                        </option>
                                     </select>
-                               
+                                    <button type="submit" style="margin-top:28px; witdht:260px;" class="btn btn-primary">
+                                        <i class="bi bi-check2-circle me-2"></i>
+                                        Update Status
+                                    </button>
+                                </form>
                             </div>
                             <div class="col-md-6">
-                            
-                                <button type="submit" style="margin-top:28px; witdht:260px;" class="btn btn-primary">
-                                    <i class="bi bi-check2-circle me-2"></i>
-                                    Update Status
-                                </button>
+                                @if(Auth::user()->id==1)
+                                <form method="POST" action="{{ route('admin.orders.assign.update') }}">
+                                    @csrf
+                                    <input type="hidden" name="id" id=""
+                                        value="{{ request()->segment(3) }}">
+                                    <label for="status">Assign user</label>
+                                    <select name="user_id" id="" class="form-control">
+                                        @foreach ($users as $user)
+                                            <option value="{{ $user->id }}"
+                                                @if ($order->assign_to == $user->id) selected @endif>{{ $user->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+
+                                    <button type="submit" style="margin-top:28px; witdht:260px;" class="btn btn-primary">
+                                        <i class="bi bi-check2-circle me-2"></i>
+                                        Assign To
+                                    </button>
+                                </form>
+                                @endif
                             </div>
-                             </form>
+
                         </div>
                     </div>
                 </div>
@@ -103,10 +126,17 @@
                     </div>
                     <div class="card-content">
                         <div class="row g-3">
-                            <div class="col-12">
-                                <label class="form-label text-muted">Quantity</label>
-                                <div class="fw-medium fs-4">{{ $order->qty }}</div>
+                            <div class="col-12 row">
+                                <div class="col-6">
+                                    <label class="form-label text-muted">Quantity</label>
+                                    <div class="fw-medium fs-4">{{ $order->qty }}</div>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label text-muted">Coins</label>
+                                    <div class="fw-medium fs-4">{{ $order->product->points ?? 0 * $order->qty }}</div>
+                                </div>
                             </div>
+
                             <div class="col-12">
                                 <label class="form-label text-muted">Rate</label>
                                 <div class="fw-medium fs-4 text-success">₹{{ number_format($order->rate, 2) }}</div>
