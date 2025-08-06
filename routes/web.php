@@ -51,7 +51,10 @@ Route::post('/contractor/register', [ContractorRegisterController::class, 'regis
 // Contractor Routes (Protected by contractor auth middleware)
 Route::middleware(['auth:contractor'])->prefix('contractor')->name('contractor.')->group(function () {
     Route::get('/dashboard', [ContractorDashboardController::class, 'index'])->name('dashboard');
-
+        Route::get('/leaders', [ContractorDashboardController::class, 'leaderboard'])->name('leaders');
+    Route::get('/profile', [ContractorDashboardController::class, 'profile'])->name('profile');
+    
+    
     // Product Routes for Contractors
     Route::prefix('products')->name('products.')->group(function () {
         Route::get('/', [ContractorProductController::class, 'index'])->name('index');
