@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use App\Models\Contractor;
 use App\Models\Badge;
+use App\Models\Brand;
 
 class DashboardController extends Controller
 {
@@ -26,10 +27,14 @@ class DashboardController extends Controller
     {
         $contractor = Auth::guard('contractor')->user();
         $referalMember  = $this->refrelmember($contractor->id);
-         $directMamber  = Contractor::where('referenced_by',$contractor->id)->count();
-         $badges = Badge::all();
-
-        return view('contractor.dashboard', compact('contractor','referalMember','directMamber', 'badges'));
+        $directMamber  = Contractor::where('referenced_by',$contractor->id)->count();
+        $badges = Badge::all();
+        $currentBadge = Badge::getAllEarnedBadges($contractor->points);
+        $nextBadge = Badge::getNextBadge($contractor->points);
+        $sponsorsToday = Contractor::where('referenced_by', $contractor->id)->whereDate('created_at', today())->count();
+        $brands = Brand::whereNot('order_by','1')->get();
+        $top_brands = Brand::where('order_by','1')->first();
+        return view('contractor.dashboard', compact('brands','top_brands','sponsorsToday','currentBadge','nextBadge','contractor','referalMember','directMamber', 'badges'));
     }
 
     /**

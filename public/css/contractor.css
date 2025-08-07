@@ -1,14 +1,14 @@
 /* Contractor App Design - Mobile First */
 :root {
-    --contractor-primary: #8B4513;
-    --contractor-secondary: #F4F3F1;
-    --contractor-dark: #2C1810;
-    --contractor-light: #FDF6E3;
-    --contractor-accent: #D2691E;
-    --contractor-success: #28a745;
-    --contractor-warning: #ffc107;
-    --contractor-danger: #dc3545;
-    --contractor-info: #17a2b8;
+--contractor-primary: #8B4513;
+  --contractor-secondary: #857A64;
+  --contractor-dark: #2C1810;
+  --contractor-light: #E7CD85;
+  --contractor-accent: #D2691E;
+  --contractor-success: #28a745;
+  --contractor-warning: #ffc107;
+  --contractor-danger: #dc3545;
+  --contractor-info: #17a2b8;
 }
 
 /* Global Styles */
@@ -129,7 +129,7 @@ body {
 
 /* Welcome Section */
 .welcome-section {
-    padding: 1rem;
+   margin-top: 5px;
     background: linear-gradient(135deg, var(--contractor-light), var(--contractor-secondary));
 }
 
@@ -164,12 +164,13 @@ body {
 }
 
 .progress-value {
-    font-size: 1rem;
-    font-weight: 700;
+    font-size: 13px;
+    font-weight: 600;
     color: var(--contractor-dark);
     margin-bottom: 0.125rem;
     text-align: right;
     flex:1;
+    
   
 }
 
@@ -712,6 +713,22 @@ body {
     padding: 1rem 1.5rem;
     font-weight: 600;
 }
+ .brand-animation {
+        animation: float 2s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+        0% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-5px);
+        }
+        100% {
+            transform: translateY(0);
+        }
+    }
+    
 
 .card-body {
     padding: 1.5rem;
@@ -1086,7 +1103,7 @@ body {
 
 .vertical-tabs-section .card {
     border: none;
-    border-radius: 0;
+    border-radius: 15px;
     box-shadow: none;
 }
 

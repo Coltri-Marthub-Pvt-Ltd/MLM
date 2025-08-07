@@ -13,4 +13,27 @@ class Badge extends Model
     {
         return $this->image ? asset('storage/'.$this->image) : null;
     }
+
+    public static function getAllEarnedBadges($userCoins)
+    {
+        return static::where('coins', '<=', $userCoins)
+            ->orderBy('coins', 'asc')
+            ->get();
+    }
+    
+    /**
+     * Get the next badge a user can work toward
+     *
+     * @param int $userCoins
+     * @return Badge|null
+     */
+    public static function getNextBadge($userCoins)
+    {
+        return static::where('coins', '>', $userCoins)
+            ->orderBy('coins', 'asc')
+            ->first();
+    }
+
+    
+
 }

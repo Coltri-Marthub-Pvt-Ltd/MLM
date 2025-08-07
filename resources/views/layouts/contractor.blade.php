@@ -21,26 +21,120 @@
     <link href="{{ asset('css/contractor.css') }}" rel="stylesheet">
 
     @stack('styles')
+    <style>
+        .app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #ffffff; /* or your preferred header color */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* optional shadow */
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+}
+
+.logo {
+    margin-right: 0.5rem;
+    font-size: 1.5rem;
+}
+
+.badges-container {
+    display: flex;
+    gap: 1rem; /* space between badges */
+}
+
+.badge-icon {
+    position: relative;
+    font-size: 1.25rem;
+    cursor: pointer;
+    color: #666; /* or your preferred icon color */
+}
+
+.badge-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #ff4757; /* or your preferred badge color */
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+.progress-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px; /* Spacing between cards */
+}
+
+/* Default: 4 cards per row (Desktop) */
+.progress-card {
+    flex: 1 1 calc(25% - 15px); /* 4 cards with gap adjustment */
+    min-width: 200px; /* Minimum card width */
+    box-sizing: border-box;
+}
+
+/* Tablet: 2 cards per row */
+@media (max-width: 992px) {
+    .progress-card {
+        flex: 1 1 calc(50% - 15px); /* 2 cards per row */
+    }
+}
+
+/* Mobile: 2 cards per row (stacked if too narrow) */
+@media (max-width: 576px) {
+    .progress-card {
+        flex: 1 1 calc(50% - 15px); /* 2 cards per row */
+        min-width: 150px; /* Smaller min-width for mobile */
+    }
+}
+
+.progress-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns on desktop */
+    gap: 15px;
+}
+
+@media (max-width: 992px) {
+    .progress-cards {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on tablet/mobile */
+    }
+}
+    </style>
 </head>
 
 <body>
     <div class="app-container">
         <!-- Header -->
-        <header class="app-header">
-            <a href="{{ route('contractor.dashboard') }}" class="logo-section">
-                <div class="logo">
-                    <i class="bi bi-person-badge"></i>
-                </div>
-                <div class="logo-text">Contractor</div>
-            </a>
-            
-            <div class="badge-icon">
-                <i class="bi bi-award"></i>
-                @if(isset($badges) && count($badges) > 0)
-                    <div class="badge-count">{{ count($badges) }}</div>
-                @endif
-            </div>
-        </header>
+  <header class="app-header">
+    <a href="{{ route('contractor.dashboard') }}" class="logo-section">
+        <div class="logo">
+            <i class="bi bi-person-badge"></i>
+        </div>
+        <div class="logo-text">Contractor</div>
+    </a>
+    
+    <div class="badges-container">
+        @foreach($currentBadge as $badge)
+        <div class="badge-icon">
+            {{-- <i class="bi bi-award"></i> --}}
+            <img src="{{ asset('storage/'.$badge->image) }}" style="border-radius: 15px; width: 35px;height: 36px;"
+            alt="{{ $badge->name }}" class="img-thumbnail" width="30"  title="{{ $badge->name }}">
+
+        </div>
+        @endforeach
+
+    </div>
+</header>
 
         <!-- Content Area -->
         <div class="content-area">
