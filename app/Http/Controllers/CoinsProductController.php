@@ -59,7 +59,7 @@ class CoinsProductController extends Controller
         $categories = Category::orderBy('name')->get();
 
         $contractor = Auth::guard('contractor')->user();
-      
+
         return view('contractor.coins_products.index', compact('products', 'categories', 'contractor'));
     }
 
@@ -79,12 +79,12 @@ class CoinsProductController extends Controller
                 ->limit(4)
                 ->get();
         }
-   
+
         return view('contractor.coins_products.show', compact('product', 'contractor', 'relatedProducts'));
     }
 
      public function ProceedOrder(Request $request){
-      
+
             CoinsOders::insert([
                 'user_id'=>Auth::guard('contractor')->user()->id,
                  'order_number'=>$randomNumber = rand(100000, 999999),
@@ -92,8 +92,12 @@ class CoinsProductController extends Controller
                 'product_id'=>$request->product_id,
                 'qty'=>$request->qty,
             ]);
-
-        return redirect()->route('contractor.myorders')->with('success', 'Order placed successfully.');
+              return response()->json([
+                'success' => true,
+                'message' => 'Order placed successfully!',
+                'order' =>''
+            ]);
+        // return redirect()->route('contractor.myorders')->with('success', 'Order placed successfully.');
 
     }
 

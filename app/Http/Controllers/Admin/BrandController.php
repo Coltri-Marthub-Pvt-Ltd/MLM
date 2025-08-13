@@ -21,29 +21,36 @@ class BrandController extends Controller
         return view('admin.brands.create');
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|unique:brands,name',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+public function store(Request $request)
+{
+    $request->validate([
+        'name' => 'required|unique:brands,name',
+        'description' => 'nullable|string',
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
 
-        $data = [
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
-            'description' => $request->description,
-        ];
+    $data = [
+        'name' => $request->name,
+        'slug' => Str::slug($request->name),
+        'description' => $request->description,
+    ];
 
-        // Handle image upload
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('brands', 'public');
-        }
-
-        Brand::create($data);
-
-        return redirect()->route('admin.brands.index')->with('success', 'Brand created successfully.');
+    // Handle image upload to public folder
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $filename = time().'_'.Str::slug($request->name).'.'.$image->getClientOriginalExtension();
+        
+        // Store in public/images/brands
+        $image->move(public_path('images/brands'), $filename);
+        
+        // Save path relative to public folder
+        $data['image'] = 'images/brands/'.$filename;
     }
+
+    Brand::create($data);
+
+    return redirect()->route('admin.brands.index')->with('success', 'Brand created successfully.');
+}
 
  // In your show method
 public function show($id)
@@ -62,9 +69,9 @@ public function edit($id)
 public function update(Request $request, Brand $brand)
 {
     $request->validate([
-        'name' => 'required|unique:brands,name,' . $brand->id,
+        'name' => 'required|unique:brands,name,'.$brand->id,
         'description' => 'nullable|string',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         'remove_image' => 'nullable|boolean',
     ]);
 
@@ -74,19 +81,30 @@ public function update(Request $request, Brand $brand)
         'description' => $request->description,
     ];
 
-    // Handle image upload
+    // Handle image removal
+    if ($request->remove_image && $brand->image) {
+        $oldImagePath = public_path($brand->image);
+        if (file_exists($oldImagePath)) {
+            unlink($oldImagePath);
+        }
+        $data['image'] = null;
+    }
+
+    // Handle new image upload
     if ($request->hasFile('image')) {
         // Delete old image if exists
         if ($brand->image) {
-            Storage::disk('public')->delete($brand->image);
+            $oldImagePath = public_path($brand->image);
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath);
+            }
         }
-        $data['image'] = $request->file('image')->store('brands', 'public');
-    }
-
-    // Handle image removal
-    if ($request->has('remove_image') && $brand->image) {
-        Storage::disk('public')->delete($brand->image);
-        $data['image'] = null;
+        
+        // Store new image
+        $image = $request->file('image');
+        $filename = time().'_'.Str::slug($request->name).'.'.$image->getClientOriginalExtension();
+        $image->move(public_path('images/brands'), $filename);
+        $data['image'] = 'images/brands/'.$filename;
     }
 
     $brand->update($data);

@@ -36,13 +36,13 @@ class CoinsProduct extends Model
     protected static function boot()
     {
         parent::boot();
-        
+
         static::creating(function ($product) {
             if (empty($product->slug)) {
                 $product->slug = Str::slug($product->name);
             }
         });
-        
+
         static::updating(function ($product) {
             if ($product->isDirty('name') && empty($product->slug)) {
                 $product->slug = Str::slug($product->name);
@@ -79,9 +79,9 @@ class CoinsProduct extends Model
             if (filter_var($this->image, FILTER_VALIDATE_URL)) {
                 return $this->image;
             }
-            return asset('storage/'.$this->image);
+            return asset($this->image);
         }
-        
+
         return asset('images/placeholder-product.jpg');
     }
 

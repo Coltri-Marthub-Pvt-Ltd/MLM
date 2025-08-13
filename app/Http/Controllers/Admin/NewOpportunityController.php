@@ -36,6 +36,7 @@ public function store(Request $request)
         'client_name' => 'required|string|max:255',
         'client_phone' => 'required|string|max:20',
         'order' => 'required|integer',
+        'project_brief'=>'required'
     ]);
 
     NewOpportunity::create($validated);
@@ -61,6 +62,7 @@ public function update(Request $request, NewOpportunity $newOpportunity)
         'client_name' => 'required|string|max:255',
         'client_phone' => 'required|string|max:20',
         'order' => 'required|integer',
+         'project_brief'=>'required'
     ]);
 
     $newOpportunity->update($validated);

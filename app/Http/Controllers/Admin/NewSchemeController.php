@@ -15,65 +15,78 @@ class NewSchemeController extends Controller
         return view('admin.new-schemes.index', compact('newSchemes'));
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255|unique:new_schemes,name',
-            'description' => 'nullable|string',
-            'order' => 'required|integer',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
+public function store(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:255|unique:new_schemes,name',
+        'description' => 'nullable|string',
+        'order' => 'required|integer',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
 
-        $data = $request->except('image');
+    $data = $request->except('image');
 
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('new-schemes', 'public');
-        }
-
-        NewScheme::create($data);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'New Scheme created successfully'
-        ]);
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $imageName = time().'_'.$image->getClientOriginalName();
+        $image->move(public_path('images/new-schemes'), $imageName);
+        $data['image'] = 'images/new-schemes/'.$imageName;
     }
 
-    public function update(Request $request, NewScheme $newScheme)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255|unique:new_schemes,name,'.$newScheme->id,
-            'description' => 'nullable|string',
-            'order' => 'required|integer',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'remove_image' => 'nullable|boolean',
-        ]);
+    NewScheme::create($data);
 
-        $data = $request->except(['image', 'remove_image']);
+    return response()->json([
+        'success' => true,
+        'message' => 'New Scheme created successfully'
+    ]);
+}
 
-        // Handle image removal
-        if ($request->remove_image) {
-            if ($newScheme->image) {
-                Storage::disk('public')->delete($newScheme->image);
-                $data['image'] = null;
+public function update(Request $request, NewScheme $newScheme)
+{
+    $request->validate([
+        'name' => 'required|string|max:255|unique:new_schemes,name,'.$newScheme->id,
+        'description' => 'nullable|string',
+        'order' => 'required|integer',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'remove_image' => 'nullable|boolean',
+    ]);
+
+    $data = $request->except(['image', 'remove_image']);
+
+    // Handle image removal
+    if ($request->remove_image) {
+        if ($newScheme->image) {
+            $oldImagePath = public_path($newScheme->image);
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath);
             }
+            $data['image'] = null;
         }
-
-        // Handle new image upload
-        if ($request->hasFile('image')) {
-            // Delete old image if exists
-            if ($newScheme->image) {
-                Storage::disk('public')->delete($newScheme->image);
-            }
-            $data['image'] = $request->file('image')->store('new-schemes', 'public');
-        }
-
-        $newScheme->update($data);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'New Scheme updated successfully'
-        ]);
     }
+
+    // Handle new image upload
+    if ($request->hasFile('image')) {
+        // Delete old image if exists
+        if ($newScheme->image) {
+            $oldImagePath = public_path($newScheme->image);
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath);
+            }
+        }
+        
+        $image = $request->file('image');
+        $imageName = time().'_'.$image->getClientOriginalName();
+        $image->move(public_path('images/new-schemes'), $imageName);
+        $data['image'] = 'images/new-schemes/'.$imageName;
+    }
+
+    $newScheme->update($data);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'New Scheme updated successfully'
+    ]);
+}
 
     public function destroy(NewScheme $newScheme)
     {

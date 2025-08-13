@@ -10,7 +10,22 @@
   --contractor-danger: #dc3545;
   --contractor-info: #17a2b8;
 }
+.brand-card {
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
 
+.brand-name {
+    color: white; /* or any color that contrasts with your images */
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+    font-weight: bold;
+    text-align: center;
+    padding: 15px;
+    background-color: rgba(0,0,0,0.3); /* semi-transparent overlay for better text visibility */
+}
 /* Global Styles */
 * {
     box-sizing: border-box;
@@ -49,7 +64,7 @@ body {
 /* Header */
 .app-header {
     background: linear-gradient(135deg, var(--contractor-primary), var(--contractor-accent));
-    padding: 1rem;
+    padding: 3px!important;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -74,15 +89,9 @@ body {
     transform: scale(1.02);
 }
 
-.logo-section:hover .logo {
-    background: rgba(255,255,255,0.3);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
 .logo {
     width: 40px;
     height: 40px;
-    background: rgba(255,255,255,0.2);
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -101,7 +110,6 @@ body {
 .badge-icon {
     width: 35px;
     height: 35px;
-    background: rgba(255,255,255,0.2);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -737,15 +745,15 @@ body {
 /* Navigation Tabs */
 .nav-tabs {
     border-bottom: 2px solid #e9ecef;
-    margin-bottom: 1rem;
+   
 }
 
 .nav-tabs .nav-link {
     border: none;
     border-radius: 8px 8px 0 0;
     color: #666;
-    font-weight: 500;
-    padding: 0.75rem 1.5rem;
+    /* font-weight: 500; */
+    /* padding: 0.75rem 1.5rem; */
     transition: all 0.3s ease;
 }
 

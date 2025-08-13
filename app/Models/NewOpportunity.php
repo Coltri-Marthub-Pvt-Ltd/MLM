@@ -17,6 +17,7 @@ class NewOpportunity extends Model
         'client_name',
         'client_phone',
         'order',
+        'project_brief'
     ];
 
     public function badge()

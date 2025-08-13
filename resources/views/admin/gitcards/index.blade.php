@@ -43,7 +43,7 @@
                                     <td class="text-muted">#{{ $gitcard->id }}</td>
                                     <td>
                                         @if($gitcard->image)
-                                            <img src="{{ asset('storage/'.$gitcard->image) }}" alt="{{ $gitcard->name }}" class="img-thumbnail" width="50">
+                                            <img src="{{ asset($gitcard->image) }}" alt="{{ $gitcard->name }}" class="img-thumbnail" width="50">
                                         @else
                                             <span class="text-muted">No image</span>
                                         @endif
@@ -61,7 +61,7 @@
                                                     data-description="{{ $gitcard->description }}"
                                                     data-coins="{{ $gitcard->coins }}"
                                                     data-orderby="{{ $gitcard->orderBY }}"
-                                                    data-image="{{ $gitcard->image ? asset('storage/'.$gitcard->image) : '' }}"
+                                                    data-image="{{ $gitcard->image ? asset($gitcard->image) : '' }}"
                                                     title="Edit">
                                                 <i class="bi bi-pencil"></i>
                                             </button>

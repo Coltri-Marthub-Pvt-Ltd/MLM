@@ -22,6 +22,7 @@ use App\Http\Controllers\CoinsProductController as CoinContractorProductControll
 use App\Http\Controllers\Contractor\DashboardController as ContractorDashboardController;
 use App\Http\Controllers\Contractor\ProductController as ContractorProductController;
 use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\Contractor\BusinessOpportunity;
 
 Route::get('/clear-cache', function () {
     Artisan::call('cache:clear');
@@ -51,17 +52,30 @@ Route::post('/contractor/register', [ContractorRegisterController::class, 'regis
 // Contractor Routes (Protected by contractor auth middleware)
 Route::middleware(['auth:contractor'])->prefix('contractor')->name('contractor.')->group(function () {
     Route::get('/dashboard', [ContractorDashboardController::class, 'index'])->name('dashboard');
-        Route::get('/leaders', [ContractorDashboardController::class, 'leaderboard'])->name('leaders');
+    Route::get('/leaders', [ContractorDashboardController::class, 'leaderboard'])->name('leaders');
     Route::get('/profile', [ContractorDashboardController::class, 'profile'])->name('profile');
-    
-    
+    Route::get('/upcomming-event', [ContractorDashboardController::class, 'upcommingEvent'])->name('upcomming.event');
+    Route::get('/event-gallery', [ContractorDashboardController::class, 'eventGallery'])->name('event.gallery');
+    Route::get('/top-wise/{any}', [ContractorDashboardController::class, 'topWise'])->name('top.wise');
+
+
     // Product Routes for Contractors
     Route::prefix('products')->name('products.')->group(function () {
         Route::get('/', [ContractorProductController::class, 'index'])->name('index');
         Route::get('/{product:slug}', [ContractorProductController::class, 'show'])->name('show');
         Route::post('/add-to-cart', [ContractorProductController::class, 'addToCart'])->name('cart');
         Route::post('/place-order', [ContractorProductController::class, 'placeOrder'])->name('myorder');
+        Route::get('/{any}/{id}', [ContractorProductController::class, 'brandProduct'])->name('brand.product');
+        // Route::get('/wise', [ContractorProductController::class, 'wise'])->name('wise');
     });
+    Route::get('/product/wise', [ContractorProductController::class, 'wise'])->name('wise');
+    Route::get('/categories/{any}', [ContractorProductController::class, 'categories'])->name('product.categories');
+    Route::get('/type/brands', [ContractorProductController::class, 'TypeBrand'])->name('type.brands');
+
+     Route::get('/business-opportunity', [BusinessOpportunity::class, 'index'])->name('business.opportunity');
+    Route::get('/opportunities/{id}', [BusinessOpportunityController::class, 'show'])
+    ->name('opportunities.show');
+
 
     // Coins Product Routes for Contractors
     Route::prefix('coins-products')->name('coins-products.')->group(function () {
@@ -80,6 +94,11 @@ Route::middleware(['auth:contractor'])->prefix('contractor')->name('contractor.'
     Route::get('my-orders', [ContractorProductController::class, 'myOrders'])->name('myorders');
     Route::get('orders/{id}/track', [ContractorProductController::class, 'OrderTrack'])->name('orders.track');
     Route::get('coins-orders/{id}/track', [CoinContractorProductController::class, 'OrderTrack'])->name('coins.orders.track');
+
+        Route::post('/products/check-order', [ContractorProductController::class, 'checkOrder'])
+    ->name('products.check-order');
+    Route::post('/products/order', [ContractorProductController::class, 'ProceedToOrder'])
+    ->name('products.order');
 });
 
 // Admin Routes (Protected by auth middleware)
@@ -102,13 +121,16 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     Route::resource('new-opportunities', \App\Http\Controllers\Admin\NewOpportunityController::class);
     Route::resource('events', \App\Http\Controllers\Admin\EventController::class);
 
+    Route::post('deal/accept', [\App\Http\Controllers\Admin\DealController::class, 'acceptDeal'])->name('deal.accept');
+
+
         Route::resource('monthly-targets', \App\Http\Controllers\Admin\MonthlyTargetController::class)
         ->except(['show', 'create', 'edit']);
-        
+
     // Additional route for deleting gallery images
     Route::resource('events', \App\Http\Controllers\Admin\EventController::class);
-    Route::delete('events/{event}/images/{mediaId}', [\App\Http\Controllers\Admin\EventController::class, 'deleteImage'])
-        ->name('admin.events.deleteImage');
+       Route::delete('events/{event}/images/{imageIndex}', [EventController::class, 'deleteImage'])
+         ->name('events.deleteImage');
 
     Route::resource('sampling-requests', \App\Http\Controllers\Admin\SamplingRequestController::class)->except(['show']);
     Route::get('sampling-requests/{samplingRequest}', [\App\Http\Controllers\Admin\SamplingRequestController::class, 'show'])->name('sampling-requests.show');

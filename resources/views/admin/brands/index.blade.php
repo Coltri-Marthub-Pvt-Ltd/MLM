@@ -27,7 +27,7 @@
                     <table class="table admin-table" id="brandsTable">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>#</th>
                                 <th>Logo</th>
                                 <th>Name</th>
                                 <th>Slug</th>
@@ -40,10 +40,10 @@
                         <tbody>
                             @foreach($brands as $brand)
                                 <tr>
-                                    <td class="text-muted">#{{ $brand->id }}</td>
+                                    <td class="text-muted">#{{ $loop->iteration }}</td>
                                     <td>
                                         @if($brand->image)
-                                            <img src="{{ asset('storage/'.$brand->image) }}" alt="{{ $brand->name }}" class="img-thumbnail" width="50">
+                                            <img src="{{ asset($brand->image) }}" alt="{{ $brand->name }}" class="img-thumbnail" width="50">
                                         @else
                                             <span class="text-muted">No image</span>
                                         @endif

@@ -122,4 +122,8 @@ class Contractor extends Authenticatable
     {
         return $this->hasMany(Contractor::class, 'referenced_by');
     }
-} 
+        public function orders()
+    {
+        return $this->hasMany(Order::class, 'user_id','id');
+    }
+}

@@ -11,7 +11,14 @@
             <div class="card-content">
                 <form method="POST" action="{{ route('admin.events.store') }}" enctype="multipart/form-data">
                     @csrf
-
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Event Date</label>
+                        <input type="date" class="form-control" id="date" name="date"
+                            value="" required>
+                        @error('date')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
+                    </div>
                     <div class="mb-3">
                         <label for="title" class="form-label">Title</label>
                         <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}" required>

@@ -5,14 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Event extends Model implements HasMedia
+class Event extends Model
 {
-    use HasFactory, SoftDeletes, InteractsWithMedia, HasSlug;
+    use HasFactory, SoftDeletes, HasSlug;
 
     protected $fillable = [
         'title',
@@ -20,15 +18,20 @@ class Event extends Model implements HasMedia
         'description',
         'type',
         'order',
+        'featured_image',
+        'gallery',
+        'date'
     ];
 
     protected $casts = [
         'order' => 'integer',
+        'gallery' => 'array',
+        'date' => 'date'
     ];
 
     protected $appends = [
         'featured_image_url',
-        'gallery_images'
+        'gallery_urls'
     ];
 
     public function getSlugOptions(): SlugOptions
@@ -38,25 +41,19 @@ class Event extends Model implements HasMedia
             ->saveSlugsTo('slug');
     }
 
-    public function registerMediaCollections(): void
-    {
-        // Single featured image
-        $this->addMediaCollection('featured_image')
-            ->singleFile()
-            ->useFallbackUrl('/images/default-event.jpg')
-            ->useFallbackPath(public_path('/images/default-event.jpg'));
-
-        // Multiple gallery images
-        $this->addMediaCollection('gallery');
-    }
-
     public function getFeaturedImageUrlAttribute()
     {
-        return $this->getFirstMediaUrl('featured_image');
+        return $this->featured_image ? asset($this->featured_image) : asset('images/default-event.jpg');
     }
 
-    public function getGalleryImagesAttribute()
+    public function getGalleryUrlsAttribute()
     {
-        return $this->getMedia('gallery');
+        if (empty($this->gallery)) {
+            return [];
+        }
+
+        return array_map(function($path) {
+            return asset($path);
+        }, $this->gallery);
     }
 }

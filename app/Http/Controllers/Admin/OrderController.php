@@ -22,7 +22,7 @@ class OrderController extends Controller
        }else{
          $query = Order::with('contractor');
        }
-    
+
         // Search functionality
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
@@ -52,7 +52,7 @@ class OrderController extends Controller
 
         // Get unique areas for filter
         $areas = Order::distinct()->pluck('area')->filter()->sort()->values();
-        
+
         return view('admin.orders.index', compact('orders', 'areas'));
     }
 
@@ -122,7 +122,7 @@ class OrderController extends Controller
         public function orderAssign(Request $request)
     {
         $order = Order::find($request->id);
-       
+
         if (!$order) {
             return redirect()->back()->with('error', 'Order not found.');
         }
@@ -139,25 +139,25 @@ class OrderController extends Controller
 
             $currentLevel->decrement('points', $request->points);
 
-            // $maxLevels = Contractor::count();
-            // $testing = [];
-            // for ($i = 0; $i <= $maxLevels; $i++) {
-            //     if (!empty($currentLevel) && !empty($currentLevel->referenced_by)) {
-                    
-            //         $nextLevel = Contractor::where('id', $currentLevel->referenced_by)->first();
-            //         $nextLevel->increment('points', ($currentLevel->points) / 2);
-            //         $nextLevel = $nextLevel->fresh();
+            $maxLevels = Contractor::count();
+            $testing = [];
+            for ($i = 0; $i <= $maxLevels; $i++) {
+                if (!empty($currentLevel) && !empty($currentLevel->referenced_by)) {
 
-            //         if ($nextLevel) {
-            //             $testing[] = $currentLevel->points/2;
-            //             $currentLevel = $nextLevel;
-            //         } else {
-            //             break;
-            //         }
-            //     } else {
-            //         break;
-            //     }
-            // }
+                    $nextLevel = Contractor::where('id', $currentLevel->referenced_by)->first();
+                    $nextLevel->increment('points', ($currentLevel->points) / 2);
+                    $nextLevel = $nextLevel->fresh();
+
+                    if ($nextLevel) {
+                        $testing[] = $currentLevel->points/2;
+                        $currentLevel = $nextLevel;
+                    } else {
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
         }
     }
 

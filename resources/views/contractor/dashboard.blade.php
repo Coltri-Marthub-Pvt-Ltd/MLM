@@ -40,17 +40,17 @@
             </div>
 
             <!-- Card 4: Add your fourth metric -->
-            <div class="progress-card">
-                <div class="progress-label">Till today</div>
-                <div class="progress-value">{{ $sponsorsToday }}</div>
-                <div class="progress-bar-container">
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: {{ min(($sponsorsToday / 100) * 100, 100) }}%"></div>
+                <div class="progress-card">
+                    <div class="progress-label">Till today</div>
+                    <div class="progress-value">{{ $sponsorsToday }}</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: {{ min(($sponsorsToday / 100) * 100, 100) }}%"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
     <!-- Bootstrap Vertical Tabs -->
     <section class="vertical-tabs-section py-3">
@@ -104,71 +104,23 @@
                                 </h5>
                             </div>
                             <div class="card-body">
-                                <div class="progress-card">
-                                    <div class="progress-label">Partner Points</div>
-                                    <div class="progress-value">200</div>
-                                    <div class="progress-bar-container">
-                                        <div class="progress-bar">
-                                            <div class="progress-fill" style="width: 20%"></div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <ul class="list-unstyled">
                                     <li class="mb-3">
+                                        @foreach($giuft_card as $gift)
                                         <div class="d-flex align-items-center">
                                             <div>
-                                                <img src="https://png.pngtree.com/png-clipart/20190614/original/pngtree-vector-picture-icon-png-image_3792401.jpg"
-                                                    alt="Gift Card" class="img-fluid" width="40px" height="40px">
+                                                <img src="{{ $gift->image ? asset($gift->image) : asset('https://png.pngtree.com/png-clipart/20190614/original/pngtree-vector-picture-icon-png-image_3792401.jpg') }}" alt="Gift Image"
+                                                   class="img-fluid" width="55px" height="55px">
                                             </div>
                                             <div>
-                                                <p>Lorem ip dor sit...</p>
+                                               <!-- <p>{{ \Illuminate\Support\Str::limit($gift->name, 30) }}</p> -->
+
+                                            <p class="d-md-none">{{ \Illuminate\Support\Str::limit($gift->description, 30) }}</p>
+
+                                            <p class="d-none d-md-block">{{ \Illuminate\Support\Str::limit($gift->description, 60) }}</p>
                                             </div>
                                         </div>
-                                        <div class="d-flex align-items-center">
-                                            <div>
-                                                <img src="https://png.pngtree.com/png-clipart/20190614/original/pngtree-vector-picture-icon-png-image_3792401.jpg"
-                                                    alt="Gift Card" class="img-fluid" width="40px" height="40px">
-                                            </div>
-                                            <div>
-                                                <p>Lorem ip dor sit...</p>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <div>
-                                                <img src="https://png.pngtree.com/png-clipart/20190614/original/pngtree-vector-picture-icon-png-image_3792401.jpg"
-                                                    alt="Gift Card" class="img-fluid" width="40px" height="40px">
-                                            </div>
-                                            <div>
-                                                <p>Lorem ip dor sit...</p>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <div>
-                                                <img src="https://png.pngtree.com/png-clipart/20190614/original/pngtree-vector-picture-icon-png-image_3792401.jpg"
-                                                    alt="Gift Card" class="img-fluid" width="40px" height="40px">
-                                            </div>
-                                            <div>
-                                                <p>Lorem ip dor sit...</p>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <div>
-                                                <img src="https://png.pngtree.com/png-clipart/20190614/original/pngtree-vector-picture-icon-png-image_3792401.jpg"
-                                                    alt="Gift Card" class="img-fluid" width="40px" height="40px">
-                                            </div>
-                                            <div>
-                                                <p>Lorem ip dor sit...</p>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <div>
-                                                <img src="https://png.pngtree.com/png-clipart/20190614/original/pngtree-vector-picture-icon-png-image_3792401.jpg"
-                                                    alt="Gift Card" class="img-fluid" width="40px" height="40px">
-                                            </div>
-                                            <div>
-                                                <p>Lorem ip dor sit...</p>
-                                            </div>
-                                        </div>
+                                        @endforeach
                                     </li>
                                 </ul>
                             </div>
@@ -188,21 +140,28 @@
                                 <div class="row">
                                    <div class="col-sm-12 text-center mb-3">
                                         <div class="card active_hlt brand-animation">
+                                             <a href="{{ route('contractor.products.brand.product',['brands',$top_brands->id]) }}">
                                             <div class="">
                                                 {{$top_brands->name}}
                                             </div>
+                                            </a>
                                         </div>
                                     </div>
-                                    @foreach($brands as $brand)
-                                    <div class="col-6 mb-3">
+                               @foreach($brands as $brand)
+                               <div class="col-6 mb-3">
+                                        <a href="{{ route('contractor.products.brand.product',['brands',$brand->id]) }}">
                                         <div class="card shadow-sm border m-0 ratio ratio-1x1">
-                                            <div class="card-body d-flex justify-content-center align-items-center">
-                                                {{$brand->name}}
+                                            <div class="card-body p-0 d-flex justify-content-center align-items-center"
+                                                style="background-image: url('{{ asset($brand->image) }}'); background-size: cover; background-position: center;">
+                                                <div style="color: white; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); background-color: rgba(0,0,0,0.3); padding: 10px 15px;">
+                                                    {{$brand->name}}
+                                                </div>
                                             </div>
                                         </div>
+                                    </a>
                                     </div>
-                                    @endforeach
-                                    
+                                @endforeach
+
                                 </div>
                             </div>
                         </div>
@@ -218,64 +177,26 @@
                                     Limited Time Schemes
                                 </h5>
                             </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-hover">
-                                        <thead class="table-light">
-                                            <tr>
-                                                <th>Scheme</th>
-                                                <th>Duration</th>
-                                                <th>Reward</th>
-                                                <th>Progress</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div>
-                                                        <strong>Double Points Week</strong>
-                                                        <br><small class="text-muted">Earn 2x points on all
-                                                            purchases</small>
-                                                    </div>
-                                                </td>
-                                                <td>7 days</td>
-                                                <td>2x Points</td>
-                                                <td>
-                                                    <div class="progress" style="height: 6px;">
-                                                        <div class="progress-bar" style="width: 75%"></div>
-                                                    </div>
-                                                    <small class="text-muted">3 days left</small>
-                                                </td>
-                                                <td><span class="badge bg-success">Active</span></td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-success">Participate</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div>
-                                                        <strong>Referral Bonus</strong>
-                                                        <br><small class="text-muted">Get 500 points per referral</small>
-                                                    </div>
-                                                </td>
-                                                <td>30 days</td>
-                                                <td>500 Points</td>
-                                                <td>
-                                                    <div class="progress" style="height: 6px;">
-                                                        <div class="progress-bar" style="width: 45%"></div>
-                                                    </div>
-                                                    <small class="text-muted">13 days left</small>
-                                                </td>
-                                                <td><span class="badge bg-success">Active</span></td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-success">Share</button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                             <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li class="mb-3">
+                                        @foreach($limitschame as $gift)
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                <img src="{{ $gift->image ? asset($gift->image) : asset('https://png.pngtree.com/png-clipart/20190614/original/pngtree-vector-picture-icon-png-image_3792401.jpg') }}" alt="Gift Image"
+                                                   class="img-fluid" width="55px" height="55px">
+                                            </div>
+                                            <div>
+                                               <!-- <p>{{ \Illuminate\Support\Str::limit($gift->name, 30) }}</p> -->
+
+                                            <p class="d-md-none">{{ \Illuminate\Support\Str::limit($gift->description, 30) }}</p>
+
+                                            <p class="d-none d-md-block">{{ \Illuminate\Support\Str::limit($gift->description, 60) }}</p>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -294,45 +215,40 @@
                                     <table class="table table-hover">
                                         <thead class="table-light">
                                             <tr>
-                                                <th>Deal</th>
-                                                <th>Discount</th>
+                                                <th>Title</th>
+                                                <th>Descriptions</th>
                                                 <th>Valid Until</th>
-                                                <th>Usage</th>
-                                                <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach ($deal as $val)
+
                                             <tr>
                                                 <td>
                                                     <div>
-                                                        <strong>New User Discount</strong>
-                                                        <br><small class="text-muted">First purchase discount</small>
+                                                        <strong>{{ $val->title }}</strong>
+                                                        {{-- <br><small class="text-muted">First purchase discount</small> --}}
                                                     </div>
                                                 </td>
-                                                <td><span class="badge bg-danger">20% OFF</span></td>
-                                                <td>2024-02-15</td>
-                                                <td>0/1</td>
-                                                <td><span class="badge bg-success">Available</span></td>
+                                                <td>{{ $val->description }} {{$val->product ? 'product name: '.$val->product->name: '' }} {{$val->coins ? 'Coins : '.$val->coins: '' }}</td>
                                                 <td>
-                                                    <button class="btn btn-sm btn-primary">Use Now</button>
+                                                    {{ \Carbon\Carbon::parse($val->start_date)->format('d-M-Y') }}
+                                                    to
+                                                    {{ \Carbon\Carbon::parse($val->end_date)->format('d-M-Y') }}
+                                                </td>
+
+                                                <td>
+                                                    <td>
+                                                        @if(!$val->accepted)
+                                                        <button class="btn btn-sm btn-primary accept-btn" data-id="{{ $val->id }}">Accept</button>
+                                                        @else
+                                                        <button class="btn btn-sm btn-success " data-id="{{ $val->id }}">Accepted</button>
+                                                        @endif
+                                                    </td>
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <td>
-                                                    <div>
-                                                        <strong>Bulk Purchase</strong>
-                                                        <br><small class="text-muted">Buy 3+ items get 15% off</small>
-                                                    </div>
-                                                </td>
-                                                <td><span class="badge bg-warning">15% OFF</span></td>
-                                                <td>2024-01-31</td>
-                                                <td>2/5</td>
-                                                <td><span class="badge bg-success">Available</span></td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-primary">Shop Now</button>
-                                                </td>
-                                            </tr>
+                                             @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -349,65 +265,26 @@
                                     Latest Updates & Features
                                 </h5>
                             </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-hover">
-                                        <thead class="table-light">
-                                            <tr>
-                                                <th>Feature</th>
-                                                <th>Type</th>
-                                                <th>Release Date</th>
-                                                <th>Status</th>
-                                                <th>Description</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div>
-                                                        <strong>Mobile App</strong>
-                                                    </div>
-                                                </td>
-                                                <td><span class="badge bg-primary">New</span></td>
-                                                <td>2024-01-20</td>
-                                                <td><span class="badge bg-success">Live</span></td>
-                                                <td>Download our new mobile app for better experience</td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-success">Download</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div>
-                                                        <strong>Real-time Tracking</strong>
-                                                    </div>
-                                                </td>
-                                                <td><span class="badge bg-info">Update</span></td>
-                                                <td>2024-01-18</td>
-                                                <td><span class="badge bg-success">Live</span></td>
-                                                <td>Track your orders in real-time with live updates</td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-outline-primary">Try Now</button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div>
-                                                        <strong>AI Recommendations</strong>
-                                                    </div>
-                                                </td>
-                                                <td><span class="badge bg-warning">Beta</span></td>
-                                                <td>2024-02-01</td>
-                                                <td><span class="badge bg-warning">Coming Soon</span></td>
-                                                <td>Get personalized product recommendations</td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-secondary" disabled>Waitlist</button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                          <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li class="mb-3">
+                                        @foreach($new as $gift)
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                <img src="{{ $gift->image ? asset($gift->image) : asset('https://png.pngtree.com/png-clipart/20190614/original/pngtree-vector-picture-icon-png-image_3792401.jpg') }}" alt="Gift Image"
+                                                   class="img-fluid" width="55px" height="55px">
+                                            </div>
+                                            <div>
+                                               <!-- <p>{{ \Illuminate\Support\Str::limit($gift->name, 30) }}</p> -->
+
+                                            <p class="d-md-none">{{ \Illuminate\Support\Str::limit($gift->description, 30) }}</p>
+
+                                            <p class="d-none d-md-block">{{ \Illuminate\Support\Str::limit($gift->description, 60) }}</p>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -449,4 +326,36 @@
             });
         });
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).on('click', '.accept-btn', function() {
+    var dealId = $(this).data('id');
+    var btn = $(this);
+
+    $.ajax({
+        url: "{{ route('admin.deal.accept') }}",
+        method: "POST",
+        data: {
+            id: dealId,
+            _token: "{{ csrf_token() }}"
+        },
+        beforeSend: function() {
+            btn.prop('disabled', true).text('Processing...');
+        },
+        success: function(response) {
+            if (response.status === 'success') {
+                btn.removeClass('btn-primary').addClass('btn-success').text('Accepted');
+            } else {
+                btn.prop('disabled', false).text('Accept');
+                alert(response.message);
+            }
+        },
+        error: function() {
+            btn.prop('disabled', false).text('Accept');
+            alert('Something went wrong.');
+        }
+    });
+});
+</script>
+
 @endpush

@@ -42,7 +42,7 @@
                                     <td class="text-muted">#{{ $scheme->id }}</td>
                                     <td>
                                         @if($scheme->image)
-                                            <img src="{{ asset('storage/'.$scheme->image) }}" alt="{{ $scheme->name }}" class="img-thumbnail" width="50">
+                                            <img src="{{ asset($scheme->image) }}" alt="{{ $scheme->name }}" class="img-thumbnail" width="50">
                                         @else
                                             <span class="text-muted">No image</span>
                                         @endif
@@ -58,7 +58,7 @@
                                                     data-name="{{ $scheme->name }}"
                                                     data-description="{{ $scheme->description }}"
                                                     data-order="{{ $scheme->order }}"
-                                                    data-image="{{ $scheme->image ? asset('storage/'.$scheme->image) : '' }}"
+                                                    data-image="{{ $scheme->image ? asset($scheme->image) : '' }}"
                                                     title="Edit">
                                                 <i class="bi bi-pencil"></i>
                                             </button>

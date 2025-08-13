@@ -25,7 +25,7 @@
                     <div class="row g-3">
                         <div class="col-md-4">
                             <label for="search" class="form-label">Search Products</label>
-                            <input type="text" class="form-control" id="search" name="search" 
+                            <input type="text" class="form-control" id="search" name="search"
                                    value="{{ request('search') }}" placeholder="Search by name or description...">
                         </div>
                         <div class="col-md-3">
@@ -33,7 +33,7 @@
                             <select class="form-select" id="category" name="category">
                                 <option value="">All Categories</option>
                                 @foreach($categories as $category)
-                                    <option value="{{ $category->id }}" 
+                                    <option value="{{ $category->id }}"
                                             {{ request('category') == $category->id ? 'selected' : '' }}>
                                         {{ $category->name }}
                                     </option>
@@ -42,12 +42,12 @@
                         </div>
                         <div class="col-md-2">
                             <label for="min_price" class="form-label">Min Price</label>
-                            <input type="number" class="form-control" id="min_price" name="min_price" 
+                            <input type="number" class="form-control" id="min_price" name="min_price"
                                    value="{{ request('min_price') }}" step="0.01" min="0">
                         </div>
                         <div class="col-md-2">
                             <label for="max_price" class="form-label">Max Price</label>
-                            <input type="number" class="form-control" id="max_price" name="max_price" 
+                            <input type="number" class="form-control" id="max_price" name="max_price"
                                    value="{{ request('max_price') }}" step="0.01" min="0">
                         </div>
                         <div class="col-md-1">
@@ -69,7 +69,7 @@
                 <h5 class="card-title">All Products</h5>
                 <p class="card-description">{{ $products->total() }} products found</p>
             </div>
-            
+
             @if($products->count() > 0)
                 <div class="table-responsive">
                     <table class="table admin-table mb-0">
@@ -88,7 +88,7 @@
                             @foreach($products as $product)
                                 <tr>
                                     <td>
-                                        <img src="{{ $product->image_url }}" alt="{{ $product->name }}" 
+                                        <img src="{{ $product->image_url }}" alt="{{ $product->name }}"
                                              class="rounded" style="width: 50px; height: 50px; object-fit: cover;">
                                     </td>
                                     <td class="fw-medium">{{ $product->name }}</td>
@@ -99,8 +99,8 @@
                                             <span class="text-muted">Uncategorized</span>
                                         @endif
                                     </td>
-                                   
-                                    <td class="fw-medium text-primary">{{ $product->points ?? 0 }} pts</td>
+
+                                    <td class="fw-medium text-primary">{{ $product->points ?? 0 }} coins</td>
                                     <td class="text-muted">{{ $product->slug }}</td>
                                     <td class="text-muted">{{ $product->created_at->format('M j, Y') }}</td>
                                     <td>
@@ -115,7 +115,7 @@
                                             <form method="POST" action="{{ route('admin.coins-products.destroy', $product) }}" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-destructive" title="Delete" 
+                                                <button type="submit" class="btn btn-sm btn-destructive" title="Delete"
                                                         data-confirm="Are you sure you want to delete this product?">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
@@ -157,4 +157,4 @@
             @endif
         </div>
     </div>
-@endsection 
+@endsection

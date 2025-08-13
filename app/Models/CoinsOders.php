@@ -11,6 +11,7 @@ class CoinsOders extends Model
     protected $table =  'coins_orders';
     protected $fillable = [
         'order_number',
+        'user_id',
         'date',
         'mkt_person',
         'partner_id',

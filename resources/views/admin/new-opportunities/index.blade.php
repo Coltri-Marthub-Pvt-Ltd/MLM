@@ -35,6 +35,7 @@
                                 <th>Client Name</th>
                                 <th>Client Phone</th>
                                 <th>Order</th>
+                                <th>Brief</th>
                                 <th>Created</th>
                                 <th>Actions</th>
                             </tr>
@@ -50,6 +51,17 @@
                                     <td>{{ $opportunity->client_name }}</td>
                                     <td>{{ $opportunity->client_phone }}</td>
                                     <td class="text-info fw-bold">{{ $opportunity->order }}</td>
+                                    <td>
+                                        @if($opportunity->project_brief)
+                                            <button class="btn btn-sm btn-outline-info view-brief-btn" 
+                                                    data-brief="{{ $opportunity->project_brief }}"
+                                                    title="View Brief">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                        @else
+                                            <span class="text-muted">N/A</span>
+                                        @endif
+                                    </td>
                                     <td class="text-muted">{{ $opportunity->created_at->format('M j, Y') }}</td>
                                     <td>
                                         <div class="btn-group" role="group">
@@ -62,6 +74,7 @@
                                                     data-client_name="{{ $opportunity->client_name }}"
                                                     data-client_phone="{{ $opportunity->client_phone }}"
                                                     data-order="{{ $opportunity->order }}"
+                                                    data-project_brief="{{ $opportunity->project_brief }}"
                                                     title="Edit">
                                                 <i class="bi bi-pencil"></i>
                                             </button>
@@ -167,6 +180,15 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="mb-3">
+                            <label for="project_brief" class="form-label">Project Brief</label>
+                            <textarea class="form-control @error('project_brief') is-invalid @enderror" 
+                                    id="project_brief" name="project_brief" rows="3">{{ old('project_brief') }}</textarea>
+                            @error('project_brief')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                         
                         <div class="mb-3">
                             <label for="order" class="form-label">Order *</label>
@@ -257,6 +279,12 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="mb-3">
+                            <label for="edit_project_brief" class="form-label">Project Brief</label>
+                            <textarea class="form-control" id="edit_project_brief" name="project_brief" rows="3"></textarea>
+                            <div class="invalid-feedback" id="project_brief-error"></div>
+                        </div>
                         
                         <div class="mb-3">
                             <label for="edit_order" class="form-label">Order *</label>
@@ -272,6 +300,24 @@
             </div>
         </div>
     </div>
+
+    <!-- View Brief Modal -->
+    <div class="modal fade" id="viewBriefModal" tabindex="-1" aria-labelledby="viewBriefModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewBriefModalLabel">Project Brief</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="briefContent">
+                    <!-- Brief content will be inserted here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('scripts')
@@ -281,7 +327,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
-
     <script>
         $(document).ready(function() {
             // Initialize DataTable
@@ -304,6 +349,7 @@
                 var clientName = $(this).data('client_name');
                 var clientPhone = $(this).data('client_phone');
                 var order = $(this).data('order');
+                var projectBrief = $(this).data('project_brief');
                 
                 // Reset form and errors
                 $('#editNewOpportunityForm')[0].reset();
@@ -321,10 +367,20 @@
                 $('#edit_client_name').val(clientName);
                 $('#edit_client_phone').val(clientPhone);
                 $('#edit_order').val(order);
+                $('#edit_project_brief').val(projectBrief);
                 
                 // Initialize and show modal
                 var editModal = new bootstrap.Modal(document.getElementById('editNewOpportunityModal'));
                 editModal.show();
+            });
+
+            // View brief button click handler
+            $(document).on('click', '.view-brief-btn', function() {
+                var briefContent = $(this).data('brief');
+                $('#briefContent').text(briefContent);
+                
+                var viewModal = new bootstrap.Modal(document.getElementById('viewBriefModal'));
+                viewModal.show();
             });
 
             // Form submission handler for create
@@ -334,6 +390,7 @@
                 var formData = form.serialize();
                 var url = form.attr('action');
                 var submitBtn = form.find('button[type="submit"]');
+                var modal = $('#createNewOpportunityModal');
                 
                 // Show loading state
                 submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...');
@@ -344,8 +401,8 @@
                     data: formData,
                     success: function(response) {
                         if(response.success) {
-                            // Close modal
-                            $('#createNewOpportunityModal').modal('hide');
+                            // Close modal first
+                            modal.modal('hide');
                             
                             // Show success message
                             Swal.fire({
@@ -380,144 +437,83 @@
                                 icon: 'error',
                                 confirmButtonText: 'OK'
                             });
-                            console.error(xhr.responseText);
                         }
+                    },
+                    complete: function() {
+                        // Ensure button is reset if request completes (success or error)
+                        submitBtn.prop('disabled', false).text('Save Opportunity');
                     }
                 });
             });
 
             // Form submission handler for edit
-           // Form submission handler for create
-$('#createNewOpportunityForm').on('submit', function(e) {
-    e.preventDefault();
-    var form = $(this);
-    var formData = form.serialize();
-    var url = form.attr('action');
-    var submitBtn = form.find('button[type="submit"]');
-    var modal = $('#createNewOpportunityModal');
-    
-    // Show loading state
-    submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...');
-    
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: formData,
-        success: function(response) {
-            if(response.success) {
-                // Close modal first
-                modal.modal('hide');
+            $('#editNewOpportunityForm').on('submit', function(e) {
+                e.preventDefault();
+                var form = $(this);
+                var formData = form.serialize();
+                var url = form.attr('action');
+                var submitBtn = $('#updateButton');
+                var modal = $('#editNewOpportunityModal');
                 
-                // Show success message
-                Swal.fire({
-                    title: 'Success!',
-                    text: response.message || 'New Opportunity created successfully',
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        location.reload();
+                // Show loading state
+                submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Updating...');
+                
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if(response.success) {
+                            // Close modal first
+                            modal.modal('hide');
+                            
+                            // Show success message
+                            Swal.fire({
+                                title: 'Success!',
+                                text: response.message || 'Opportunity updated successfully',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        // Reset button state
+                        submitBtn.prop('disabled', false).text('Update Opportunity');
+                        
+                        if(xhr.status === 422) {
+                            // Validation errors
+                            var errors = xhr.responseJSON.errors;
+                            for (var field in errors) {
+                                var input = $('[name="' + field + '"]');
+                                input.addClass('is-invalid');
+                                $('#' + field + '-error').text(errors[field][0]);
+                            }
+                        } else {
+                            // Other errors
+                            Swal.fire({
+                                title: 'Error!',
+                                text: xhr.responseJSON?.message || 'An error occurred. Please try again.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    },
+                    complete: function() {
+                        // Ensure button is reset if request completes (success or error)
+                        submitBtn.prop('disabled', false).text('Update Opportunity');
                     }
                 });
-            }
-        },
-        error: function(xhr) {
-            // Reset button state
-            submitBtn.prop('disabled', false).text('Save Opportunity');
-            
-            if(xhr.status === 422) {
-                // Validation errors
-                var errors = xhr.responseJSON.errors;
-                for (var field in errors) {
-                    var input = $('[name="' + field + '"]');
-                    input.addClass('is-invalid');
-                    input.next('.invalid-feedback').text(errors[field][0]);
-                }
-            } else {
-                // Other errors
-                Swal.fire({
-                    title: 'Error!',
-                    text: xhr.responseJSON?.message || 'An error occurred. Please try again.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-            }
-        },
-        complete: function() {
-            // Ensure button is reset if request completes (success or error)
-            submitBtn.prop('disabled', false).text('Save Opportunity');
-        }
-    });
-});
-
-// Form submission handler for edit
-$('#editNewOpportunityForm').on('submit', function(e) {
-    e.preventDefault();
-    var form = $(this);
-    var formData = form.serialize();
-    var url = form.attr('action');
-    var submitBtn = $('#updateButton');
-    var modal = $('#editNewOpportunityModal');
-    
-    // Show loading state
-    submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Updating...');
-    
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: formData,
-        success: function(response) {
-            if(response.success) {
-                // Close modal first
-                modal.modal('hide');
-                
-                // Show success message
-                Swal.fire({
-                    title: 'Success!',
-                    text: response.message || 'Opportunity updated successfully',
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        location.reload();
-                    }
-                });
-            }
-        },
-        error: function(xhr) {
-            // Reset button state
-            submitBtn.prop('disabled', false).text('Update Opportunity');
-            
-            if(xhr.status === 422) {
-                // Validation errors
-                var errors = xhr.responseJSON.errors;
-                for (var field in errors) {
-                    var input = $('[name="' + field + '"]');
-                    input.addClass('is-invalid');
-                    $('#' + field + '-error').text(errors[field][0]);
-                }
-            } else {
-                // Other errors
-                Swal.fire({
-                    title: 'Error!',
-                    text: xhr.responseJSON?.message || 'An error occurred. Please try again.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-            }
-        },
-        complete: function() {
-            // Ensure button is reset if request completes (success or error)
-            submitBtn.prop('disabled', false).text('Update Opportunity');
-        }
-    });
-});
+            });
         });
     </script>
 @endpush
 
 @push('styles')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
@@ -563,6 +559,14 @@ $('#editNewOpportunityForm').on('submit', function(e) {
             max-height: 50px;
             object-fit: contain;
             background-color: #f8f9fa;
+        }
+
+        /* Style for brief modal */
+        #briefContent {
+            white-space: pre-wrap; /* Preserve line breaks */
+            padding: 15px;
+            max-height: 60vh;
+            overflow-y: auto;
         }
     </style>
 @endpush

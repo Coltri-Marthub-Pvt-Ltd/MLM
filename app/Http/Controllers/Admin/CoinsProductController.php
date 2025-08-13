@@ -16,7 +16,7 @@ class CoinsProductController extends Controller
      */
     public function index(Request $request)
     {
-     
+
         $query = CoinsProduct::with('category');
 
         // Search functionality
@@ -36,7 +36,7 @@ class CoinsProductController extends Controller
 
         $products = $query->orderBy('id','desc')->paginate(15);
         $categories = Category::orderBy('name')->get();
-    
+
         return view('admin.coins_products.index', compact('products', 'categories'));
     }
 
@@ -51,36 +51,87 @@ class CoinsProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:products',
-            'description' => 'nullable|string',
-            'points' => 'nullable|integer|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'category_id' => 'nullable|exists:categories,id'
-        ]);
+  public function store(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'slug' => 'nullable|string|max:255|unique:products',
+        'description' => 'nullable|string',
+        'points' => 'nullable|integer|min:0',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'category_id' => 'nullable|exists:categories,id'
+    ]);
 
-        $data = $request->all();
-        
-        if (empty($data['slug'])) {
-            $data['slug'] = Str::slug($data['name']);
-        }
+    $data = $request->all();
 
-        // Handle image upload
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $filename = time() . '_' . Str::slug(pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $image->getClientOriginalExtension();
-            $path = $image->storeAs('products', $filename, 'public');
-            $data['image'] = $path;
-        }
-
-        CoinsProduct::create($data);
-
-        return redirect()->route('admin.coins-products.index')
-            ->with('success', 'Coins Product created successfully.');
+    // Generate slug if not provided
+    if (empty($data['slug'])) {
+        $data['slug'] = Str::slug($data['name']);
     }
+
+    // Handle image upload to public/products
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $filename = time() . '_' . Str::slug(pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $image->getClientOriginalExtension();
+        $destinationPath = public_path('products');
+
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
+        }
+
+        $image->move($destinationPath, $filename);
+        $data['image'] = 'products/' . $filename;
+    }
+
+    CoinsProduct::create($data);
+
+    return redirect()->route('admin.coins-products.index')
+        ->with('success', 'Coins Product created successfully.');
+}
+
+public function update(Request $request, CoinsProduct $product)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'slug' => 'nullable|string|max:255|unique:products,slug,' . $product->id,
+        'description' => 'nullable|string',
+        'points' => 'nullable|integer|min:0',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'category_id' => 'nullable|exists:categories,id'
+    ]);
+
+    $data = $request->all();
+
+    // Generate slug if not provided
+    if (empty($data['slug'])) {
+        $data['slug'] = Str::slug($data['name']);
+    }
+
+    // Handle image upload to public/products
+    if ($request->hasFile('image')) {
+        // Delete old image
+        if ($product->image && file_exists(public_path($product->image))) {
+            unlink(public_path($product->image));
+        }
+
+        $image = $request->file('image');
+        $filename = time() . '_' . Str::slug(pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $image->getClientOriginalExtension();
+        $destinationPath = public_path('products');
+
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
+        }
+
+        $image->move($destinationPath, $filename);
+        $data['image'] = 'products/' . $filename;
+    }
+
+    $product->update($data);
+
+    return redirect()->route('admin.coins-products.show', $product)
+        ->with('success', 'Coins Product updated successfully.');
+}
+
 
     /**
      * Display the specified resource.
@@ -102,41 +153,7 @@ class CoinsProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, CoinsProduct $product)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:products,slug,' . $product->id,
-            'description' => 'nullable|string',
-            'points' => 'nullable|integer|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'category_id' => 'nullable|exists:categories,id'
-        ]);
 
-        $data = $request->all();
-        
-        if (empty($data['slug'])) {
-            $data['slug'] = Str::slug($data['name']);
-        }
-
-        // Handle image upload
-        if ($request->hasFile('image')) {
-            // Delete old image if it exists
-            if ($product->image && Storage::disk('public')->exists($product->image)) {
-                Storage::disk('public')->delete($product->image);
-            }
-
-            $image = $request->file('image');
-            $filename = time() . '_' . Str::slug(pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $image->getClientOriginalExtension();
-            $path = $image->storeAs('products', $filename, 'public');
-            $data['image'] = $path;
-        }
-
-        $product->update($data);
-
-        return redirect()->route('admin.coins-products.show', $product)
-            ->with('success', 'Coins Product updated successfully.');
-    }
 
     /**
      * Remove the specified resource from storage.

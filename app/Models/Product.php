@@ -98,17 +98,18 @@ class Product extends Model
     /**
      * Get the image URL
      */
-    public function getImageUrlAttribute(): ?string
-    {
-        if ($this->image) {
-            if (filter_var($this->image, FILTER_VALIDATE_URL)) {
-                return $this->image;
-            }
-            return asset('storage/'.$this->image);
+public function getImageUrlAttribute(): ?string
+{
+    if ($this->image) {
+        if (filter_var($this->image, FILTER_VALIDATE_URL)) {
+            return $this->image;
         }
-        
-        return asset('images/placeholder-product.jpg');
+        // For images stored in public folder
+        return asset($this->image);
     }
+    
+    return asset('images/placeholder-product.jpg');
+}
 
     /**
      * Get short description

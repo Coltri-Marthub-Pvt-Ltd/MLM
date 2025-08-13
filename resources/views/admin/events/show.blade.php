@@ -15,7 +15,7 @@
                         <form method="POST" action="{{ route('admin.events.destroy', $event) }}" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-destructive" 
+                            <button type="submit" class="btn btn-sm btn-destructive"
                                     onclick="return confirm('Are you sure you want to delete this event?')">
                                 <i class="bi bi-trash"></i> Delete
                             </button>
@@ -27,18 +27,21 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="mb-4">
-                            <img src="{{ $event->getFirstMediaUrl('featured_image') }}" alt="Featured Image" class="img-fluid rounded">
+                            <img src="{{ $event->featured_image_url }}" alt="Featured Image" class="img-fluid rounded">
                         </div>
 
-                        <div class="d-flex flex-wrap gap-2">
-                            @foreach($event->getMedia('gallery') as $image)
-                                <img src="{{ $image->getUrl() }}" alt="Gallery Image" class="img-thumbnail" style="height: 80px;">
-                            @endforeach
-                        </div>
+                        @if(count($event->gallery_urls) > 0)
+                            <h6>Gallery Images</h6>
+                            <div class="d-flex flex-wrap gap-2">
+                                @foreach($event->gallery_urls as $imageUrl)
+                                    <img src="{{ $imageUrl }}" alt="Gallery Image" class="img-thumbnail" style="height: 80px;">
+                                @endforeach
+                            </div>
+                        @endif
                     </div>
                     <div class="col-md-8">
                         <h3 class="mb-3">{{ $event->title }}</h3>
-                        
+
                         <div class="mb-3">
                             <span class="badge {{ $event->type == 'upcoming' ? 'bg-warning text-dark' : 'bg-success' }}">
                                 {{ ucfirst($event->type) }}

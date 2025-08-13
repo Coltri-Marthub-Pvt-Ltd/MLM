@@ -10,7 +10,7 @@ class GitCard extends Model
         'name', 
         'description', 
         'coins', 
-        'orderBY', // Added new field
+        'orderBY',
         'image'
     ];
     

@@ -41,7 +41,7 @@
                                     <td class="text-muted">#{{ $badge->id }}</td>
                                     <td>
                                         @if($badge->image)
-                                            <img src="{{ asset('storage/'.$badge->image) }}" alt="{{ $badge->name }}" class="img-thumbnail" width="50">
+                                            <img src="{{ asset($badge->image) }}" alt="{{ $badge->name }}" class="img-thumbnail" width="50">
                                         @else
                                             <span class="text-muted">No image</span>
                                         @endif
@@ -55,7 +55,7 @@
                                                     data-id="{{ $badge->id }}"
                                                     data-name="{{ $badge->name }}"
                                                     data-coins="{{ $badge->coins }}"
-                                                    data-image="{{ $badge->image ? asset('storage/'.$badge->image) : '' }}"
+                                                    data-image="{{ $badge->image ? asset($badge->image) : '' }}"
                                                     title="Edit">
                                                 <i class="bi bi-pencil"></i>
                                             </button>

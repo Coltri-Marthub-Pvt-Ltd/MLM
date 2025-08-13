@@ -122,13 +122,12 @@
         </div>
         <div class="logo-text">Contractor</div>
     </a>
-    
+
     <div class="badges-container">
         @foreach($currentBadge as $badge)
         <div class="badge-icon">
-            {{-- <i class="bi bi-award"></i> --}}
-            <img src="{{ asset('storage/'.$badge->image) }}" style="border-radius: 15px; width: 35px;height: 36px;"
-            alt="{{ $badge->name }}" class="img-thumbnail" width="30"  title="{{ $badge->name }}">
+            <img src="{{ asset($badge->image) }}" style="border-radius: 15px; width: 26px;height: 29px;"
+            alt="{{ $badge->name }}" class="" width="30"  title="{{ $badge->name }}">
 
         </div>
         @endforeach
@@ -160,11 +159,11 @@
         <!-- Footer Menu -->
         <footer class="app-footer">
             <div class="footer-menu">
-                <a href="{{ route('contractor.dashboard') }}" class="footer-menu-item {{ request()->routeIs('contractor.dashboard') ? 'active' : '' }}">
+                <a href="{{ route('contractor.business.opportunity') }}" class="footer-menu-item {{ request()->routeIs('contractor.business.opportunity') ? 'active' : '' }}">
                     <i class="bi bi-briefcase footer-icon"></i>
                     <span>Business</span>
                 </a>
-                <a href="{{ route('contractor.products.index') }}" class="footer-menu-item {{ request()->routeIs('contractor.products.*') ? 'active' : '' }}">
+                <a href="{{ route('contractor.wise') }}" class="footer-menu-item {{ request()->routeIs('contractor.wise') ? 'active' : '' }}">
                     <i class="bi bi-bag footer-icon"></i>
                     <span>Products</span>
                 </a>
@@ -186,7 +185,8 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     @stack('scripts')
+
 </body>
 </html>

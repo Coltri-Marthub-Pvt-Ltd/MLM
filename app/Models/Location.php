@@ -22,4 +22,8 @@ class Location extends Model
      *
      * @var array
      */
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }
